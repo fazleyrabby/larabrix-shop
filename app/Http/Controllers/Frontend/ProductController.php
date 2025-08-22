@@ -20,20 +20,37 @@ class ProductController extends Controller
     {
         $selectedCategories = $request->input('categories');
         $sortBy = $request->input('sort_by');
+        $clear = $request->input('clear') === 'true';
+        $priceMin = $request->input('price_min');
+        $priceMax = $request->input('price_max');
+        $hasFilters = $selectedCategories || $sortBy || $priceMin || $priceMax;
+
         $categories = Category::toBase()->select('id','title','is_pc_part')->latest()->get();
-        $products = Product::with([
+        $query = Product::with([
                 'category',
                 'variants.attributeValues.attribute', 
             ])
             ->when($selectedCategories, function ($query, $selectedCategories) {
                 return $query->whereIn('category_id', $selectedCategories);
             })
-            ->when($sortBy, function ($query, $sortBy) {
+            ->when($sortBy != '', function ($query, $sortBy) {
                 [$column, $direction] = explode(',', $sortBy);
                 return $query->orderBy($column, $direction);
-            })
-        ->paginate(10)
-        ->withQueryString();
+            })->when($priceMin != '' || $priceMax != '', function ($query) use ($priceMin, $priceMax) {
+                if ($priceMin != '' && $priceMax != '') {
+                    return $query->whereBetween('price', [$priceMin, $priceMax]);
+                } elseif ($priceMin != '') {
+                    return $query->where('price', '>=', $priceMin);
+                } elseif ($priceMax != '') {
+                    return $query->where('price', '<=', $priceMax);
+                }
+            });
+
+        $products = $query->paginate(10);
+
+        if (!$clear && $hasFilters) {
+            $products->appends($request->except('page'));
+        }
 
         return view('frontend.products.index', compact('products','categories'));
     }

@@ -20,7 +20,7 @@
         }
 
         .page-container {
-            min-height: calc(100dvh - 280px);
+            min-height: calc(100dvh - 160px);
         }
     </style>
 

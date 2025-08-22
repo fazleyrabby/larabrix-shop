@@ -31,6 +31,7 @@
                             <label for="SortBy" class="block text-xs font-medium text-gray-700"> Sort By </label>
 
                             <select name="sort_by" class="select">
+                                <option value="">Select</option>
                                 <option value="title,DESC" @selected(request('sort_by') == 'title,DESC')>Title, DESC</option>
                                 <option value="title,ASC" @selected(request('sort_by') == 'title,ASC')>Title, ASC</option>
                                 <option value="price,DESC" @selected(request('sort_by') == 'price,DESC')>Price, DESC</option>
@@ -62,10 +63,10 @@
                                             <span class="text-sm text-gray-700"> {{ count(request('categories', [])) }}
                                                 Selected </span>
 
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 class="text-sm text-gray-900 underline underline-offset-4">
                                                 Reset
-                                            </button>
+                                            </button> --}}
                                         </header>
 
                                         <ul class="space-y-1 border-t border-gray-200 p-4">
@@ -104,10 +105,10 @@
                                         <header class="flex items-center justify-between p-4">
                                             <span class="text-sm text-gray-700"> 0 Selected </span>
 
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 class="text-sm text-gray-900 underline underline-offset-4">
                                                 Reset
-                                            </button>
+                                            </button> --}}
                                         </header>
 
                                         <ul class="space-y-1 border-t border-gray-200 p-4">
@@ -161,10 +162,10 @@
                                         <header class="flex items-center justify-between p-4">
                                             <span class="text-sm text-gray-700"> The highest price is $600 </span>
 
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 class="text-sm text-gray-900 underline underline-offset-4">
                                                 Reset
-                                            </button>
+                                            </button> --}}
                                         </header>
 
                                         <div class="border-t border-gray-200 p-4">
@@ -172,20 +173,22 @@
                                                 <label for="FilterPriceFrom" class="flex items-center gap-2">
                                                     <span class="text-sm text-gray-600">$</span>
 
-                                                    <input type="text" placeholder="Type here" class="input" />
+                                                    <input type="text" name="price_min" placeholder="Type here"
+                                                        class="input" value="{{ request()->get('price_min') }}" />
                                                 </label>
 
                                                 <label for="FilterPriceTo" class="flex items-center gap-2">
                                                     <span class="text-sm text-gray-600">$</span>
 
-                                                    <input type="text" placeholder="Type here" class="input" />
+                                                    <input type="text" name="price_max" placeholder="Type here"
+                                                        class="input" value="{{ request()->get('price_max') }}" />
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
                                 </details>
 
-                                <details
+                                {{-- <details
                                     class="overflow-hidden rounded-sm border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
                                     <summary
                                         class="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
@@ -203,11 +206,6 @@
                                     <div class="border-t border-gray-200 bg-white">
                                         <header class="flex items-center justify-between p-4">
                                             <span class="text-sm text-gray-700"> 0 Selected </span>
-
-                                            <button type="button"
-                                                class="text-sm text-gray-900 underline underline-offset-4">
-                                                Reset
-                                            </button>
                                         </header>
 
                                         <ul class="space-y-1 border-t border-gray-200 p-4">
@@ -266,13 +264,22 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </details>
+                                </details> --}}
                             </div>
                         </div>
                     </div>
                     <div class="mt-4">
                         <button type="submit" class="btn btn-neutral">
                             Apply Filters
+                        </button>
+                        <button type="submit" name="clear" value="true" class="btn btn-error text-white"
+                            onclick="
+                                const form = this.form;
+                                form.querySelectorAll('input[type=text], input[type=number], select').forEach(el => el.value = '');
+                                form.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+                                form.submit();
+                            ">
+                            Clear All
                         </button>
                     </div>
                 </form>
@@ -292,11 +299,10 @@
                                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                                         </svg>
                                     </button>
-                                    
+
                                     <a href="{{ route('frontend.products.show', $product->slug) }}">
-                                        <img src="{{ $product->fullImage }}"
-                                            alt="{{ $product->title }}" id="product-image-{{ $product->id }}"
-                                            data-src="{{ $product->fullImage  }}"
+                                        <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
+                                            id="product-image-{{ $product->id }}" data-src="{{ $product->fullImage }}"
                                             id="product-image-{{ $product->id }}"
                                             class="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
                                             loading="lazy" />
@@ -312,12 +318,11 @@
                                             <label
                                                 for="variant-select-{{ $product->id }}">{{ $product->attributes }}</label>
                                             <select id="variant-select-{{ $product->id }}"
-                                                class="select select-bordered w-full"
-                                                x-model="selectedVariantId"
+                                                class="select select-bordered w-full" x-model="selectedVariantId"
                                                 @change="setVariantId($event.target.value); updateImage($event.target.value)">
                                                 <option value="">Select Variant</option>
                                                 @foreach ($product->variants as $variant)
-                                                    <option value="{{ $variant->id }}" 
+                                                    <option value="{{ $variant->id }}"
                                                         data-image="{{ $variant->fullImage }}">
                                                         {{ $variant->attributeValues->pluck('title')->join(' / ') }} -
                                                         ${{ $variant->price }}
@@ -327,8 +332,7 @@
 
                                             <div>
                                                 <button type="button" @click="addToCart()"
-                                                    class="btn mt-4 block w-full btn-neutral"
-                                                    x-show="selectedVariantId"
+                                                    class="btn mt-4 block w-full btn-neutral" x-show="selectedVariantId"
                                                     :disabled="!selectedVariantId">
                                                     Add to Cart
                                                 </button>

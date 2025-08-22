@@ -5,9 +5,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <h1 class="navbar-brand navbar-brand-autodark">
-        <a href=".">
+        <a href="{{ route('admin.dashboard') }}">
+          Larabrix-shop
           {{-- <img src="{{ asset('logo-sm.png') }}" height="15" width="15" alt="Tabler" style="filter: brightness(0) invert(1);"> --}}
-          <img src="{{ asset('logo-space.png') }}" width="100" alt="Tabler" style="filter: brightness(0) invert(1);">
+          {{-- <img src="{{ asset('logo-space.png') }}" width="100" alt="Tabler" style="filter: brightness(0) invert(1);"> --}}
         </a>
       </h1>
       <div class="navbar-nav flex-row d-lg-none">

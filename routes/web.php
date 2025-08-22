@@ -23,6 +23,7 @@ use App\Http\Controllers\Frontend\CartController;
 
 use App\Http\Controllers\Frontend\DashboardController as FrontendDashboardController;
 use App\Http\Controllers\Frontend\FormSubmissionController as FrontendFormSubmissionController;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 
@@ -121,15 +122,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     });
 });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
 
-Route::post('/forms/{form}/submit', [FrontendFormSubmissionController::class, 'store'])->name('forms.submit');
+// Route::post('/forms/{form}/submit', [FrontendFormSubmissionController::class, 'store'])->name('forms.submit');
 // Route::get('/pages/{slug}', [FrontendPageController::class, 'show'])
 //     ->name('frontend.pages.show');
-Route::middleware(['auth'])->get('/page-preview/{slug}', [FrontendPageController::class, 'preview'])
-    ->name('frontend.pages.preview');
+// Route::middleware(['auth'])->get('/page-preview/{slug}', [FrontendPageController::class, 'preview'])
+//     ->name('frontend.pages.preview');
 Route::get('/blogs/{slug}', [FrontendPageController::class, 'blog'])
     ->name('frontend.blog.show');
 
