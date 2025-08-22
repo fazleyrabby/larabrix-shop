@@ -1,26 +1,30 @@
 <?php
 
-use App\Http\Controllers\Admin\BlogController;
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\FormBuilderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CrudController;
 use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\FormSubmissionController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\MediaController;
-use App\Http\Controllers\Admin\PageBuilderController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\PaymentGatewayController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
+
+use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Admin\FormSubmissionController;
+use App\Http\Controllers\Admin\PaymentGatewayController;
+use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Frontend\CartController;
+
 use App\Http\Controllers\Frontend\DashboardController as FrontendDashboardController;
 use App\Http\Controllers\Frontend\FormSubmissionController as FrontendFormSubmissionController;
-use App\Http\Controllers\Frontend\OrderController;
-use App\Http\Controllers\Frontend\PageController as FrontendPageController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
+use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 
 // use App\Http\Controllers\Admin\CrudController;
 
@@ -65,20 +69,16 @@ Route::post('admin/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 
-Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('/cruds', CrudController::class)->names('cruds');
+    // Route::resource('/cruds', CrudController::class)->names('cruds');
     Route::get('/menus/sort', [MenuController::class, 'sort'])->name('menus.sort');
     Route::post('/menus/save', [MenuController::class, 'saveSortedMenu'])->name('menus.save');
     // Route::post('/menus/type/', [MenuController::class, 'menus'])->name('menus.type');
     Route::resource('/menus', MenuController::class)->names('menus');
-    Route::post('filepond/upload', [CrudController::class, 'upload'])->name('filepond.upload');
-    Route::delete('filepond/revert', [CrudController::class, 'revert'])->name('filepond.revert');
+    // Route::post('filepond/upload', [CrudController::class, 'upload'])->name('filepond.upload');
+    // Route::delete('filepond/revert', [CrudController::class, 'revert'])->name('filepond.revert');
 
-    Route::get('/tasks/kanban', [TaskController::class, 'kanban'])->name('tasks.kanban');
-    Route::post('/tasks/sort', [TaskController::class, 'sortTasks'])->name('tasks.sort');
-    Route::post('/tasks/status/sort', [TaskController::class, 'sortStatus'])->name('tasks.sort.status');
-    Route::resource('/tasks', TaskController::class)->names('tasks');
 
 
     Route::group([
@@ -98,19 +98,19 @@ Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group
         Route::post('/delete', [MediaController::class, 'delete'])->name('delete'); // Delete selected
     });
 
-    Route::resource('forms', FormBuilderController::class);
-    Route::get('forms/{form}/builder', [FormBuilderController::class, 'builder'])->name('forms.builder');
-    Route::post('forms/{form}/builder', [FormBuilderController::class, 'saveBuilder'])->name('forms.builder.save');
+    // Route::resource('forms', FormBuilderController::class);
+    // Route::get('forms/{form}/builder', [FormBuilderController::class, 'builder'])->name('forms.builder');
+    // Route::post('forms/{form}/builder', [FormBuilderController::class, 'saveBuilder'])->name('forms.builder.save');
     Route::resource('blogs', BlogController::class)->names('blogs');
-    Route::resource('pages', PageController::class);
+    // Route::resource('pages', PageController::class);
 
     // Page builder routes nested under pages:
-    Route::prefix('pages/{page}')->group(function () {
-        Route::get('builder', [PageBuilderController::class, 'index'])->name('pages.builder');
-        Route::post('builder/store', [PageBuilderController::class, 'store'])->name('pages.builder.store');
-        Route::post('add-block', [PageBuilderController::class, 'addBlock'])->name('pages.builder.add.block');
-        Route::post('builder/save', [PageBuilderController::class, 'save'])->name('pages.builder.save');
-    });
+    // Route::prefix('pages/{page}')->group(function () {
+    //     Route::get('builder', [PageBuilderController::class, 'index'])->name('pages.builder');
+    //     Route::post('builder/store', [PageBuilderController::class, 'store'])->name('pages.builder.store');
+    //     Route::post('add-block', [PageBuilderController::class, 'addBlock'])->name('pages.builder.add.block');
+    //     Route::post('builder/save', [PageBuilderController::class, 'save'])->name('pages.builder.save');
+    // });
 
     Route::resource('payment-gateways', PaymentGatewayController::class);
 
@@ -126,8 +126,8 @@ Route::get('/', function () {
 });
 
 Route::post('/forms/{form}/submit', [FrontendFormSubmissionController::class, 'store'])->name('forms.submit');
-Route::get('/pages/{slug}', [FrontendPageController::class, 'show'])
-    ->name('frontend.pages.show');
+// Route::get('/pages/{slug}', [FrontendPageController::class, 'show'])
+//     ->name('frontend.pages.show');
 Route::middleware(['auth'])->get('/page-preview/{slug}', [FrontendPageController::class, 'preview'])
     ->name('frontend.pages.preview');
 Route::get('/blogs/{slug}', [FrontendPageController::class, 'blog'])
@@ -135,4 +135,38 @@ Route::get('/blogs/{slug}', [FrontendPageController::class, 'blog'])
 
 Route::get('/test', [TestController::class, 'index']);
 
-require __DIR__.'/ecommerce.php';
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('brands', BrandController::class);
+    Route::prefix('products')->as('products.')->group(function () {
+        Route::resource('attributes', AttributeController::class)->names('attributes');
+        Route::resource('categories', CategoryController::class)->names('categories');
+        Route::resource('{product}/variants', ProductVariantController::class)->names('variants');
+    });
+    Route::resource('products', ProductController::class);
+    Route::resource('orders', OrderController::class);
+});
+
+
+
+Route::get('/products', [FrontendProductController::class, 'index'])->name('frontend.products.index');
+Route::get('/products/{slug}', [FrontendProductController::class, 'show'])->name('frontend.products.show');
+
+
+// Cart routes
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('frontend.cart.index');
+    Route::post('add', [CartController::class, 'add'])->name('frontend.cart.add');
+    Route::post('add-multiple', [CartController::class, 'addMultiple'])->name('frontend.cart.add-multiple');
+    Route::post('remove', [CartController::class, 'remove'])->name('frontend.cart.remove');
+    Route::post('update', [CartController::class, 'update'])->name('frontend.cart.update');
+});
+
+Route::get('/pc-builder', [FrontendProductController::class, 'pcBuilder'])->name('frontend.pc_builder');
+Route::get('/cart', [CartController::class, 'cart'])->name('frontend.cart.index');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('frontend.checkout.index')->middleware('customer');
+Route::get('/payment-complete', [CheckoutController::class, 'complete'])->name('frontend.payment.complete');
+
+
+
+Route::middleware(['auth', 'role:user'])
+    ->get('/orders/{id}/show', [FrontendOrderController::class, 'show'])->name('frontend.orders.show');

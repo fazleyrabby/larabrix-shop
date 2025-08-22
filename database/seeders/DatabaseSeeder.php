@@ -44,16 +44,12 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-            CrudSeeder::class,
             MenuSeeder::class,
-            TaskSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
             AttributeSeeder::class,
             AttributeValueSeeder::class,
             BlogSeeder::class,
-            FormSeeder::class,
-            PageSeeder::class,
             PaymentGatewaySeeder::class,
         ]);
     }
