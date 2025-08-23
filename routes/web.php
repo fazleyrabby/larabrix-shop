@@ -23,6 +23,7 @@ use App\Http\Controllers\Frontend\CartController;
 
 use App\Http\Controllers\Frontend\DashboardController as FrontendDashboardController;
 use App\Http\Controllers\Frontend\FormSubmissionController as FrontendFormSubmissionController;
+use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
@@ -115,11 +116,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('payment-gateways', PaymentGatewayController::class);
 
-    Route::prefix('forms/{form}')->group(function () {
-        Route::get('/submissions', [FormSubmissionController::class, 'index'])->name('forms.submissions.index');
-        Route::get('/submissions/{submission}', [FormSubmissionController::class, 'show'])->name('forms.submissions.show');
-        Route::delete('/submissions/{submission}', [FormSubmissionController::class, 'destroy'])->name('forms.submissions.destroy');
-    });
+    // Route::prefix('forms/{form}')->group(function () {
+    //     Route::get('/submissions', [FormSubmissionController::class, 'index'])->name('forms.submissions.index');
+    //     Route::get('/submissions/{submission}', [FormSubmissionController::class, 'show'])->name('forms.submissions.show');
+    //     Route::delete('/submissions/{submission}', [FormSubmissionController::class, 'destroy'])->name('forms.submissions.destroy');
+    // });
 });
 
 Route::get('/', [HomeController::class, 'index']);

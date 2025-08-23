@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -12,7 +13,9 @@ class HomeController extends Controller
     public function index(){
         $categories = $this->categories();
         $products = Product::where('type', 'simple')->orderBy('id', 'DESC')->limit(8)->get();
-        return view('welcome', compact('categories','products'));
+        $deals = Product::where('type', 'simple')->inRandomOrder()->orderBy('id', 'DESC')->limit(4)->get();
+        $blogs = Blog::latest()->limit(4)->get();
+        return view('welcome', compact('categories','products','deals','blogs'));
     }
 
     private function categories(){

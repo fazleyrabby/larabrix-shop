@@ -285,31 +285,119 @@
                 </form>
 
                 <div class="lg:col-span-3">
-                    <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-3 mb-4">
-                        @foreach ($products as $product)
-                            <li>
-                                <div class="group relative block overflow-hidden border border-gray-100 bg-white">
-                                    <button type="button"
-                                        class="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75">
-                                        <span class="sr-only">Wishlist</span>
+                    <div class="mb-4 flex justify-between items-center">
+    <div class="flex space-x-2">
+        <form action="{{ route('frontend.products.index') }}" method="get" class="flex space-x-2">
+            <button class="btn btn-sm" name="view" value="grid">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
+                </svg>
+            </button>
+            <button class="btn btn-sm" name="view" value="list">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+            </button>
+        </form>
+    </div>
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                        </svg>
-                                    </button>
+    <div>
+        <form action="{{ route('frontend.products.index') }}" method="get">
+            <select class="select" name="limit" onchange="this.form.submit()">
+                <option value="10" @selected(request()->get('limit') == 10)>10</option>
+                <option value="20" @selected(request()->get('limit') == 20)>20</option>
+                <option value="36" @selected(request()->get('limit') == 36)>36</option>
+                <option value="50" @selected(request()->get('limit') == 50)>50</option>
+            </select>
+        </form>
+    </div>
+</div>
+                    
+                    @if (request()->get('view') == 'grid' || !request()->get('view'))
+                        <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-3 mb-4">
+                            @foreach ($products as $product)
+                                <li>
+                                    <div class="group relative block overflow-hidden border border-gray-100 bg-white">
+                                        <button type="button"
+                                            class="absolute end-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75">
+                                            <span class="sr-only">Wishlist</span>
 
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                            </svg>
+                                        </button>
+
+                                        <a href="{{ route('frontend.products.show', $product->slug) }}">
+                                            <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
+                                                id="product-image-{{ $product->id }}"
+                                                data-src="{{ $product->fullImage }}"
+                                                id="product-image-{{ $product->id }}"
+                                                class="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
+                                                loading="lazy" />
+                                        </a>
+
+                                        <div class="p-6" x-data="cart({{ $product->id }})" x-init="init()">
+                                            <h3 class="mt-4 text-lg font-medium text-gray-900">
+                                                <a
+                                                    href="{{ route('frontend.products.show', $product->slug) }}">{{ $product->title }}</a>
+                                            </h3>
+
+                                            @if (count($product->variants))
+                                                <label
+                                                    for="variant-select-{{ $product->id }}">{{ $product->attributes }}</label>
+                                                <select id="variant-select-{{ $product->id }}"
+                                                    class="select select-bordered w-full" x-model="selectedVariantId"
+                                                    @change="setVariantId($event.target.value); updateImage($event.target.value)">
+                                                    <option value="">Select Variant</option>
+                                                    @foreach ($product->variants as $variant)
+                                                        <option value="{{ $variant->id }}"
+                                                            data-image="{{ $variant->fullImage }}">
+                                                            {{ $variant->attributeValues->pluck('title')->join(' / ') }} -
+                                                            ${{ $variant->price }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                <div>
+                                                    <button type="button" @click="addToCart()"
+                                                        class="btn mt-4 block w-full btn-neutral"
+                                                        x-show="selectedVariantId" :disabled="!selectedVariantId">
+                                                        Add to Cart
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <p class="mt-1.5 text-sm text-gray-700">${{ $product->price }}</p>
+                                                <div>
+                                                    <button type="button" @click="addToCart()"
+                                                        class="btn mt-4 block w-full btn-neutral">
+                                                        Add to Cart
+                                                    </button>
+                                                </div>
+                                            @endif
+
+
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <ul class="space-y-4 mb-4">
+                            @foreach ($products as $product)
+                                <li class="flex gap-4 border border-gray-100 bg-white p-4 rounded-lg items-center">
                                     <a href="{{ route('frontend.products.show', $product->slug) }}">
                                         <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
-                                            id="product-image-{{ $product->id }}" data-src="{{ $product->fullImage }}"
-                                            id="product-image-{{ $product->id }}"
-                                            class="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
-                                            loading="lazy" />
+                                            class="h-32 w-32 object-cover rounded-md" loading="lazy" />
                                     </a>
 
-                                    <div class="p-6" x-data="cart({{ $product->id }})" x-init="init()">
-                                        <h3 class="mt-4 text-lg font-medium text-gray-900">
+                                    <div x-data="cart({{ $product->id }})" x-init="init()" class="flex-1">
+                                        <h3 class="text-lg font-medium text-gray-900">
                                             <a
                                                 href="{{ route('frontend.products.show', $product->slug) }}">{{ $product->title }}</a>
                                         </h3>
@@ -330,29 +418,24 @@
                                                 @endforeach
                                             </select>
 
-                                            <div>
-                                                <button type="button" @click="addToCart()"
-                                                    class="btn mt-4 block w-full btn-neutral" x-show="selectedVariantId"
-                                                    :disabled="!selectedVariantId">
-                                                    Add to Cart
-                                                </button>
-                                            </div>
+                                            <button type="button" @click="addToCart()"
+                                                class="btn mt-2 w-full btn-neutral" x-show="selectedVariantId"
+                                                :disabled="!selectedVariantId">
+                                                Add to Cart
+                                            </button>
                                         @else
                                             <p class="mt-1.5 text-sm text-gray-700">${{ $product->price }}</p>
-                                            <div>
-                                                <button type="button" @click="addToCart()"
-                                                    class="btn mt-4 block w-full btn-neutral">
-                                                    Add to Cart
-                                                </button>
-                                            </div>
+                                            <button type="button" @click="addToCart()"
+                                                class="btn mt-2 w-full btn-neutral">
+                                                Add to Cart
+                                            </button>
                                         @endif
-
-
                                     </div>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
                     {{ $products->links('pagination::tailwind') }}
                 </div>
             </div>

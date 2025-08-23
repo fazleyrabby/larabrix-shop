@@ -1,5 +1,5 @@
 <footer class="bg-gray-50 dark:bg-gray-900">
-  <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto px-4 py-8 sm:px-6 lg:px-8">
     <div class="sm:flex sm:items-center sm:justify-between">
       <div class="flex justify-center text-teal-600 sm:justify-start dark:text-teal-300">
         <svg class="h-8" viewBox="0 0 118 24" fill="none" xmlns="http://www.w3.org/2000/svg">
