@@ -18,6 +18,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $search = $request->input('q');
         $selectedCategories = $request->input('categories');
         $sortBy = $request->input('sort_by');
         $clear = $request->input('clear') === 'true';
@@ -30,6 +31,9 @@ class ProductController extends Controller
                 'category',
                 'variants.attributeValues.attribute', 
             ])
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
             ->when($selectedCategories, function ($query, $selectedCategories) {
                 return $query->whereIn('category_id', $selectedCategories);
             })

@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index(){
         $categories = $this->categories();
-        return view('welcome', compact('categories'));
+        $products = Product::where('type', 'simple')->orderBy('id', 'DESC')->limit(8)->get();
+        return view('welcome', compact('categories','products'));
     }
 
     private function categories(){

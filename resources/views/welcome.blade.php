@@ -4,11 +4,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
     <style>
         /* .glide__arrow--left {
-                                left: -5em !important;
-                            }
-                            .glide__arrow--right {
-                                right: 5em !important;
-                            } */
+                                    left: -5em !important;
+                                }
+                                .glide__arrow--right {
+                                    right: 5em !important;
+                                } */
     </style>
 @endpush
 @section('content')
@@ -88,17 +88,50 @@
 
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-4 justify-items-center">
             @foreach ($categories as $id => $title)
-                 <div class="flex flex-col items-center space-y-2 cursor-pointer">
+                <div class="flex flex-col items-center space-y-2 cursor-pointer">
                     <div
                         class="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow hover:shadow-lg transition">
-                        <img src="https://placehold.co/150x150/FF7F50/ffffff?text={{ $title }}" alt="{{ $title }}"
-                            class="w-full h-full object-cover" />
+                        <img src="https://placehold.co/150x150/FF7F50/ffffff?text={{ $title }}"
+                            alt="{{ $title }}" class="w-full h-full object-cover" />
                     </div>
                     <span class="text-sm font-medium text-center">{{ $title }}</span>
-                </div>   
+                </div>
             @endforeach
         </div>
     </div>
+
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6">Trending Products</h2>
+
+            <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <!-- Product Card -->
+                @foreach ($products as $product)
+                        <div class="card bg-base-100 shadow hover:shadow-lg transition">
+                    <figure>
+                        <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
+                            id="product-image-{{ $product->id }}" data-src="{{ $product->fullImage }}"
+                            id="product-image-{{ $product->id }}"
+                            class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
+                            loading="lazy" />
+                    </figure>
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-lg">{{ $product->title }}</h3>
+                        <p class="text-sm text-gray-500">
+                            {{ \Illuminate\Support\Str::words($product->short_description, 10, '...') }}
+                        </p>
+                        <div class="card-actions mt-2 justify-between items-center">
+                            <span class="font-bold text-teal-600">${{ $product->price }}</span>
+                            <button class="btn btn-sm btn-primary">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                
+
+            </div>
+        </div>
+    </section>
 
     <div class="hero bg-base-200 page-container">
         <div class="hero-content text-center">

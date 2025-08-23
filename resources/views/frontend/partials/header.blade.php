@@ -6,7 +6,22 @@
                     <span>LARABRIX SHOP</span>
                 </a>
             </div>
-
+            <!-- Navbar Center: Search -->
+            <div class="navbar-center hidden lg:flex w-full max-w-xl absolute left-1/2 transform -translate-x-1/2">
+                <form action="{{ route('frontend.products.index') }}" method="GET" class="w-full relative">
+                    <label class="input w-full relative p-0">
+                        {{-- <svg class="h-[1em] opacity-50 absolute left-3 top-1/2 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg> --}}
+                        <input type="search" name="q" required placeholder="Search products..."
+                            class="w-full px-4 rounded border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 dark:text-black"
+                            value="{{ request()->get('q') }}">
+                    </label>
+                </form>
+            </div>
             <div x-data="{ isMenuOpen: false, isCartOpen: false }" class="md:flex md:items-center md:gap-12">
                 <nav aria-label="Global" class="md:block hidden w-full md:w-auto mt-4 md:mt-0">
                     {{-- @php
