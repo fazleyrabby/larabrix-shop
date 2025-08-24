@@ -3,7 +3,7 @@ name: Deploy Laravel to cPanel via SSH
 on:
   push:
     branches:
-      - production
+      - deploy
 
 jobs:
   deploy:
@@ -57,21 +57,21 @@ jobs:
         run: |
           ssh -p "${{ secrets.SSH_PORT }}" ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} <<'EOF'
             echo "Checking if target directory exists:"
-            if [ -d "$HOME/larabrix.rhtech.dev" ]; then
+            if [ -d "$HOME/larabrix-shop.rhtech.dev" ]; then
               echo "Target directory exists"
             else
               echo "Creating target directory..."
-              mkdir -p "$HOME/larabrix.rhtech.dev"
+              mkdir -p "$HOME/larabrix-shop.rhtech.dev"
             fi
 
-            echo "Unzipping into ~/larabrix.rhtech.dev"
-            unzip -o ~/deploy.zip -d ~/larabrix.rhtech.dev
+            echo "Unzipping into ~/larabrix-shop.rhtech.dev"
+            unzip -o ~/deploy.zip -d ~/larabrix-shop.rhtech.dev
             rm ~/deploy.zip
           EOF
 
       - name: 📤 Upload .env File
         run: |
-          echo "${{ secrets.LARABRIX_ENV }}" > .env
+          echo "${{ secrets.LARABRIX_SHOP_ENV }}" > .env
           scp -P ${{ secrets.SSH_PORT }} \
               -o StrictHostKeyChecking=no \
               .env \
