@@ -15,23 +15,17 @@ class BlogSeeder extends Seeder
      */
     public function run(): void
     {
-        $tags = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $tags[] = Term::create([
-                'type' => 'tag',
-                'value' => 'Tag ' . $i,
-            ]);
-        }
-
+        $tags = Term::where('type', 'blogs_tag')->get();
         // Create blogs using factory
         Blog::factory()
             ->count(20)
             ->create()
             ->each(function ($blog) use ($tags) {
-                // Attach 1-3 random tags per blog
-                $blog->terms()->attach(
-                    collect($tags)->random(rand(1, 3))->pluck('id')->toArray()
-                );
+                // Pick 1-3 random blog tags
+                $randomTags = $tags->random(rand(1, 3))->pluck('id')->toArray();
+
+                // Attach them
+                $blog->terms()->attach($randomTags);
             });
     }
 }

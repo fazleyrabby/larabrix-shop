@@ -36,14 +36,8 @@ class DatabaseSeeder extends Seeder
         $roleSuperAdmin = Role::create(['name' => 'user']);
         $super->assignRole(['user']);
 
-        for ($i = 1; $i <= 10; $i++) {
-            Term::create([
-                'type' => 'brand',
-                'value' => 'Tag ' . $i,
-            ]);
-        }
-
         $this->call([
+            TermSeeder::class,
             MenuSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,

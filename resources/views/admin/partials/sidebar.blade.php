@@ -197,7 +197,7 @@
                 Ecommerce
               </span>
             </a>
-            <div @class(['show' => request()->is('admin/products*') || request()->is('admin/brands*') || request()->is('admin/categories*'), 'dropdown-menu'])>
+            <div @class(['show' => request()->is('admin/products*') || request()->is('admin/brands*') || request()->is('admin/categories*') || request()->get('type') === 'products', 'dropdown-menu'])>
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
                   <a @class(['active' => request()->is('admin/order*'), 'dropdown-item']) href="{{ route('admin.orders.index') }}">Orders</a>
@@ -205,6 +205,11 @@
                   <a @class(['active' => request()->routeIs('admin.products.index') || request()->routeIs('admin.products.edit') || request()->routeIs('admin.products.create'), 'dropdown-item'])  href="{{ route('admin.products.index') }}">Products</a>
                   <a @class(['active' => request()->is('admin/products/attributes*'), 'dropdown-item']) href="{{ route('admin.products.attributes.index') }}">Attributes</a>
                   <a @class(['active' => request()->is('admin/brands*'), 'dropdown-item']) href="{{ route('admin.brands.index') }}">Brands</a>
+                  <a @class([
+                      'dropdown-item', 
+                      'active' => request()->is('admin/tags*') && request()->get('type') === 'products'
+                  ])  
+                  href="{{ route('admin.tags.index', ['type' => 'products']) }}">Tag</a>
                   {{-- <a @class(['active' => request()->is('admin/products/variations*'), 'dropdown-item'])  href="{{ route('admin.products.variants.index') }}">Variation</a> --}}
                 </div>
               </div>

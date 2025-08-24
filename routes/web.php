@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Admin\FormSubmissionController;
 use App\Http\Controllers\Admin\PaymentGatewayController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Frontend\CartController;
 
 use App\Http\Controllers\Frontend\DashboardController as FrontendDashboardController;
@@ -69,14 +70,19 @@ Route::prefix('admin')->middleware('redirect.role')->group(function () {
 
 Route::post('admin/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Route::middleware(['auth', 'role:admin'])->prefix('admin/{type}')->name('admin.')->group(function () {
+//     Route::resource('tags', TagController::class)
+//         ->parameters(['tags' => 'tag'])
+//         ->scoped();
+// });
 
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     // Route::resource('/cruds', CrudController::class)->names('cruds');
     Route::get('/menus/sort', [MenuController::class, 'sort'])->name('menus.sort');
     Route::post('/menus/save', [MenuController::class, 'saveSortedMenu'])->name('menus.save');
-    // Route::post('/menus/type/', [MenuController::class, 'menus'])->name('menus.type');
+    Route::post('/menus/type/', [MenuController::class, 'menus'])->name('menus.type');
     Route::resource('/menus', MenuController::class)->names('menus');
     // Route::post('filepond/upload', [CrudController::class, 'upload'])->name('filepond.upload');
     // Route::delete('filepond/revert', [CrudController::class, 'revert'])->name('filepond.revert');
@@ -103,6 +109,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Route::resource('forms', FormBuilderController::class);
     // Route::get('forms/{form}/builder', [FormBuilderController::class, 'builder'])->name('forms.builder');
     // Route::post('forms/{form}/builder', [FormBuilderController::class, 'saveBuilder'])->name('forms.builder.save');
+    
+
+    // Route::prefix('blogs')->name('blogs.')->group(function () {
+    //     Route::resource('tags', TagController::class)
+    //         ->parameters(['tags' => 'tag'])
+    //         ->names('tags')
+    //         ->scoped();
+    // });
     Route::resource('blogs', BlogController::class)->names('blogs');
     // Route::resource('pages', PageController::class);
 
@@ -121,6 +135,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     //     Route::get('/submissions/{submission}', [FormSubmissionController::class, 'show'])->name('forms.submissions.show');
     //     Route::delete('/submissions/{submission}', [FormSubmissionController::class, 'destroy'])->name('forms.submissions.destroy');
     // });
+
+    Route::resource('tags', TagController::class);
 });
 
 Route::get('/', [HomeController::class, 'index']);
@@ -137,6 +153,7 @@ Route::get('/test', [TestController::class, 'index']);
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('brands', BrandController::class);
+    Route::resource('tags', TagController::class);
     Route::prefix('products')->as('products.')->group(function () {
         Route::resource('attributes', AttributeController::class)->names('attributes');
         Route::resource('categories', CategoryController::class)->names('categories');
@@ -145,6 +162,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('products', ProductController::class);
     Route::resource('orders', OrderController::class);
 });
+
+
 
 
 
