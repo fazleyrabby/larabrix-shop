@@ -41,7 +41,7 @@
                                 <label class="col-3 col-form-label required">Brand Name</label>
                                 <div class="col">
                                     <input type="text" class="form-control"
-                                        placeholder="Brand Name" name="value" value="{{ $brand->value }}">
+                                        placeholder="Brand Name" name="title" value="{{ $brand->title }}">
                                     <small class="form-hint">
                                         @error('value')
                                             <div class="text-danger mt-2">{{ $message }}</div>

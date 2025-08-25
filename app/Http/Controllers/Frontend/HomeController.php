@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Term;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,7 +16,9 @@ class HomeController extends Controller
         $products = Product::where('type', 'simple')->orderBy('id', 'DESC')->limit(8)->get();
         $deals = Product::where('type', 'simple')->inRandomOrder()->orderBy('id', 'DESC')->limit(4)->get();
         $blogs = Blog::latest()->limit(4)->get();
-        return view('welcome', compact('categories','products','deals','blogs'));
+        $slider = Term::where('type','top_slider')->with('sliderInfo')->first();
+        $sliders = $slider->sliderInfo->value ? json_decode($slider->sliderInfo->value) : [];
+        return view('welcome', compact('categories','products','deals','blogs','sliders'));
     }
 
     private function categories(){

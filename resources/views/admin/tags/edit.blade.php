@@ -41,7 +41,7 @@
                                 <label class="col-3 col-form-label required">Tag Name</label>
                                 <div class="col">
                                     <input type="text" class="form-control"
-                                        placeholder="Tag Name" name="value" value="{{ $tag->value }}">
+                                        placeholder="Tag Name" name="title" value="{{ $tag->value }}">
                                     <small class="form-hint">
                                         @error('value')
                                             <div class="text-danger mt-2">{{ $message }}</div>

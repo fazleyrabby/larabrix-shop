@@ -39,7 +39,7 @@ class ProductController extends Controller
             ->when($selectedCategories, function ($query, $selectedCategories) {
                 return $query->whereIn('category_id', $selectedCategories);
             })
-            ->when($sortBy != '', function ($query, $sortBy) {
+            ->when($sortBy != '', function ($query) use ($sortBy) {
                 [$column, $direction] = explode(',', $sortBy);
                 return $query->orderBy($column, $direction);
             })->when($priceMin != '' || $priceMax != '', function ($query) use ($priceMin, $priceMax) {

@@ -27,7 +27,7 @@ class TermSeeder extends Seeder
         foreach ($brands as $brand) {
             Term::create([
                 'type' => 'brand',
-                'value' => $brand,
+                'title' => $brand,
             ]);
         }
 
@@ -46,7 +46,7 @@ class TermSeeder extends Seeder
         foreach ($productTags as $tag) {
             Term::create([
                 'type' => 'products_tag',
-                'value' => $tag,
+                'title' => $tag,
             ]);
         }
 
@@ -65,7 +65,7 @@ class TermSeeder extends Seeder
         foreach ($blogTags as $tag) {
             Term::create([
                 'type' => 'blogs_tag',
-                'value' => $tag,
+                'title' => $tag,
             ]);
         }
     }

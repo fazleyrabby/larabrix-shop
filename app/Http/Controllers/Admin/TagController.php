@@ -16,7 +16,7 @@ class TagController extends Controller
         $search = request()->get('q');
         $limit = request()->get('limit') ?? 10;
         $tags = Term::where('type', $type . '_tag')
-                ->where('value', 'LIKE', "%$search%")
+                ->where('title', 'LIKE', "%$search%")
                 ->latest()
                 ->paginate($limit)
                 ->appends(request()->all());
@@ -34,7 +34,7 @@ class TagController extends Controller
     {
         $type = request()->get('type');
         $validated = $request->validate([
-            'value' => [
+            'title' => [
                 'required',
                 'string',
                 'max:255',
@@ -44,7 +44,7 @@ class TagController extends Controller
 
         Term::create([
             'type' => $type . "_tag",
-            'value' => $validated['value'],
+            'title' => $validated['title'],
         ]);
 
         return redirect()->route("admin.tags.index", ['type' => $type])
@@ -61,7 +61,7 @@ class TagController extends Controller
     {
         $type = request()->get('type');
         $validated = $request->validate([
-            'value' => [
+            'title' => [
                 'required',
                 'string',
                 'max:255',

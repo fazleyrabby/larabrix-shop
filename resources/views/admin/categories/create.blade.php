@@ -49,6 +49,34 @@
                                 </small>
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label class="col-3 col-form-label required">Slug</label>
+                            <div class="col">
+                                <input type="text" class="form-control" aria-describedby="emailHelp"
+                                    placeholder="Slug" name="slug" value="{{ old('slug') }}">
+                                <small class="form-hint">
+                                    @error('slug')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </small>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label class="col-3 col-form-label required">Parent</label>
+                            <div class="col">
+                                <select type="text" class="form-select" name="parent_id" id="categories" value="">
+                                    <option selected value="">-</option>
+                                    @foreach ($categories as $index => $title)
+                                        <option value="{{ $index }}">{{ $title }}</option>
+                                    @endforeach
+                                  </select>
+                                <small class="form-hint">
+                                    @error('parent_id')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </small>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-end">
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -61,3 +89,15 @@
       </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    let el;
+    if (window.TomSelect) {
+        new TomSelect(el = document.getElementById('categories'), {
+            allowEmptyOption: true,
+            create: true
+        });
+    }
+</script>
+@endpush

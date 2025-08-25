@@ -19,6 +19,10 @@ if (!function_exists('setPaginationMetaData')) {
     }
 }
 
+function sliderTypes(){
+    return ['top_slider','bottom_slider','middle_slider'];
+}
+
 
 
 function getDummyProducts(){

@@ -36,12 +36,12 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'value' => 'required|string|max:255|unique:terms,value',
+            'title' => 'required|string|max:255|unique:terms,title',
         ]);
 
         Term::create([
             'type' => 'brand',
-            'value' => $request->value,
+            'title' => $request->title,
         ]);
 
         return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
@@ -64,11 +64,11 @@ class BrandController extends Controller
         $brand = Term::where('type', 'brand')->findOrFail($id);
 
         $request->validate([
-            'value' => 'required|string|max:255|unique:terms,value,' . $brand->id,
+            'title' => 'required|string|max:255|unique:terms,title,' . $brand->id,
         ]);
 
         $brand->update([
-            'value' => $request->value,
+            'title' => $request->title,
         ]);
 
         return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully.');

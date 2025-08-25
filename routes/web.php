@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Admin\FormSubmissionController;
 use App\Http\Controllers\Admin\PaymentGatewayController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Frontend\CartController;
 
@@ -137,6 +138,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // });
 
     Route::resource('tags', TagController::class);
+    Route::resource('sliders', SliderController::class);
 });
 
 Route::get('/', [HomeController::class, 'index']);

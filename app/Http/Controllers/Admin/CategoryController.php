@@ -24,7 +24,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        $categories = Category::toBase()->pluck('title', 'id');
+        return view('admin.categories.create', compact('categories'));
     }
 
     /**
@@ -34,6 +35,8 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:191|unique:categories,title',
+            'parent_id' => 'nullable',
+            'slug' => 'required',
         ]);
         Category::create($validated);
         return redirect()->route('admin.products.categories.create')->with(['success' => 'Successfully created!']);
@@ -53,7 +56,8 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         // $this->authorize('create', Product::class);
-        return view('admin.categories.edit', compact('category'));
+        $categories = Category::toBase()->whereNot('id', $category->id)->pluck('title', 'id');
+        return view('admin.categories.edit', compact('category','categories'));
     }
 
     /**
@@ -63,6 +67,8 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:191|unique:categories,title,' . $id,
+            'parent_id' => 'nullable',
+            'slug' => 'required',
         ]);
         $category = Category::findOrFail($id);
         $category->update($validated);

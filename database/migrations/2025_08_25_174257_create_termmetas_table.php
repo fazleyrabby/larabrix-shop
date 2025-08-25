@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('terms', function (Blueprint $table) {
+        Schema::create('termmetas', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // e.g. tag, category, brand, etc.
-            $table->string('title');
-            $table->boolean('status')->default(1);
-            $table->timestamps();
+            $table->unsignedBigInteger('term_id');
+            $table->string('key');
+            $table->text('value')->nullable(); 
+            $table->foreign('term_id')
+                ->references('id')->on('terms')
+                ->onDelete('cascade'); 
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('terms');
+        Schema::dropIfExists('termmetas');
     }
 };

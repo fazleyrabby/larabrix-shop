@@ -83,7 +83,7 @@
                     <tr>
                         <td><input class="form-check-input m-0 align-middle selected-item" type="checkbox" value="{{ $tag->id }}" aria-label="Select invoice"></td>
                         <td><span class="text-secondary">{{ $tag->id }}</span></td>
-                        <td>{{ $tag->value }}</td>
+                        <td>{{ $tag->title }}</td>
 
                         <td>{{ $tag->created_at->diffForHumans() }}</td>
                         <td class="text-end">

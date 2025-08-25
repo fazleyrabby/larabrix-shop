@@ -17,6 +17,11 @@ class Term extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function sliderInfo()
+    {
+        return $this->hasOne(Termmeta::class, 'term_id')->where('key', 'slider_info');
+    }
+
     // Scope to get only tags
     public function scopeTags($query)
     {

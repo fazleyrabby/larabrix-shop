@@ -30,26 +30,28 @@
                     <ul class="glide__slides h-full">
 
                         <!-- Slide 1 -->
-                        <li class="glide__slide flex items-center justify-between h-full px-4 md:px-16 gap-6">
-                            <!-- Left: Title + Text + Button -->
-                            <div
-                                class="flex flex-col justify-center space-y-6 w-full md:w-2/5 p-6 rounded text-left h-full">
-                                <h2 class="text-4xl font-bold text-gray-800">Slide Title</h2>
-                                <p class="text-gray-700 text-lg">Promo text for the slide. Make it longer to utilize more
-                                    space.</p>
-                                <button class="px-8 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                                    Learn More
-                                </button>
-                            </div>
+                        @foreach ($sliders as $slider)
+                            <li class="glide__slide flex items-center justify-between h-full px-4 md:px-16 gap-6">
+                                <!-- Left: Title + Text + Button -->
+                                <div
+                                    class="flex flex-col justify-center space-y-6 w-full md:w-2/5 p-6 rounded text-left h-full">
+                                    <h2 class="text-4xl font-bold text-gray-800">{{ $slider->text }}</h2>
+                                    <p class="text-gray-700 text-lg">{{ $slider->description }}</p>
+                                    <a href="{{ $slider->link }}" class="px-8 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                        Learn More
+                                    </a>
+                                </div>
 
-                            <!-- Right: Image -->
-                            <div class="flex items-center justify-center w-full md:w-1/2 h-full">
-                                <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    alt="Slide Image" class="object-cover rounded shadow max-w-full h-auto">
-                            </div>
-                        </li>
+                                <!-- Right: Image -->
+                                <div class="flex items-center justify-center w-full md:w-1/2 h-full">
+                                    <img src="{{ $slider->image ?? 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}"
+                                        alt="Slide Image" class="object-cover rounded shadow max-w-full h-auto">
+                                </div>
+                            </li>
+                        @endforeach
+                        
 
-                        <!-- Slide 2 -->
+                        {{-- <!-- Slide 2 -->
                         <li class="glide__slide flex items-center justify-between h-full px-4 md:px-16 gap-6">
                             <!-- Left: Title + Text + Button -->
                             <div
@@ -67,7 +69,7 @@
                                 <img src="https://images.unsplash.com/photo-1585147877975-6acd0a929a46?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                                     alt="Slide Image" class="object-cover rounded shadow max-w-full h-auto">
                             </div>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </div>

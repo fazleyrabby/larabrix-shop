@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Brand List')
+@section('title', 'Slider List')
 @section('content')
     <!-- Page header -->
     <div class="page-header d-print-none">
@@ -11,13 +11,13 @@
                         Overview
                     </div> --}}
                     <h2 class="page-title">
-                        Brands
+                        Sliders
                     </h2>
                 </div>
                 <!-- Page title actions -->
                 <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
-                        <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">
+                        <a href="{{ route('admin.sliders.create') }}" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -25,7 +25,7 @@
                                 <path d="M12 5l0 14" />
                                 <path d="M5 12l14 0" />
                             </svg>
-                            Create new brand
+                            Create new slider
                         </a>
                         {{-- <button data-route="{{ route('admin.categories.bulk_delete') }}" type="button" id="bulk-delete-btn" class="btn btn-danger" disabled>Delete Selected</button> --}}
                     </div>
@@ -44,7 +44,7 @@
                     <div class="text-secondary">
                       Show
                       <div class="mx-2 d-inline-block">
-                        <select name="limit" onchange="updateData(this)" data-route="{{ route('admin.brands.index') }}">
+                        <select name="limit" onchange="updateData(this)" data-route="{{ route('admin.sliders.index') }}">
                           <option value="5" @selected((request()->limit ?? 10) == 5)>5</option>
                           <option value="10" @selected((request()->limit ?? 10) == 10)>10</option>
                           <option value="20" @selected((request()->limit ?? 10) == 20)>20</option>
@@ -73,27 +73,29 @@
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>
                         </th>
                         <th>Title</th>
+                        <th>Type / Position</th>
                         <th>Created at</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                    @foreach ($brands as $brand)
+                    @foreach ($sliders as $slider)
                     <tr>
-                        <td><input class="form-check-input m-0 align-middle selected-item" type="checkbox" value="{{ $brand->id }}" aria-label="Select invoice"></td>
-                        <td><span class="text-secondary">{{ $brand->id }}</span></td>
-                        <td>{{ $brand->title }}</td>
+                        <td><input class="form-check-input m-0 align-middle selected-item" type="checkbox" value="{{ $slider->id }}" aria-label="Select invoice"></td>
+                        <td><span class="text-secondary">{{ $slider->id }}</span></td>
+                        <td>{{ $slider->title }}</td>
+                        <td>{{ $slider->type }}</td>
 
-                        <td>{{ $brand->created_at->diffForHumans() }}</td>
+                        <td>{{ $slider->created_at->diffForHumans() }}</td>
                         <td class="text-end">
                           <span class="dropdown">
                             <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>
                             <div class="dropdown-menu dropdown-menu-end">
-                              <a class="dropdown-item" href="{{ route('admin.brands.edit', $brand->id) }}">
+                              <a class="dropdown-item" href="{{ route('admin.sliders.edit', $slider->id) }}">
                                 Edit
                               </a>
                               <form onsubmit="return confirmDelete(event, this)"
-                                  action="{{ route('admin.brands.destroy', $brand->id) }}"
+                                  action="{{ route('admin.sliders.destroy', $slider->id) }}"
                                   method="post">
                                   @csrf
                                   @method('delete')
@@ -108,7 +110,7 @@
                   </table>
                 </div>
                 <div class="card-footer">
-                  {{ $brands->links('pagination::bootstrap-5') }}
+                  {{ $sliders->links('pagination::bootstrap-5') }}
                 </div>
               </div>
             </div>

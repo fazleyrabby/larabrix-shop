@@ -34,7 +34,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::toBase()->pluck('title', 'id');
-        $brands = Term::where('type','brand')->toBase()->pluck('value', 'id');
+        $brands = Term::where('type','brand')->toBase()->pluck('title', 'id');
         $attributes = Attribute::with('values')->get();
         return view('admin.products.create', compact('categories','attributes','brands'));
     }
@@ -43,7 +43,7 @@ class ProductController extends Controller
     {
         // $this->authorize('create', Product::class);
         $categories = Category::toBase()->pluck('title', 'id');
-        $brands = Term::where('type','brand')->toBase()->pluck('value', 'id');
+        $brands = Term::where('type','brand')->toBase()->pluck('title', 'id');
         $attributes = Attribute::with('values')->get();
         $combinations = $this->service->variantCombinations($product);
         $attrRows = $this->service->attributeRows($combinations);

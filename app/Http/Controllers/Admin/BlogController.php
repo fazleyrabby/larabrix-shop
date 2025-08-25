@@ -21,7 +21,7 @@ class BlogController extends Controller
 
     public function create(): View
     {
-        $tags = Term::toBase()->where('type','tag')->pluck('value','id');
+        $tags = Term::toBase()->where('type','tag')->pluck('title','id');
         return view('admin.blogs.create',compact('tags'));
     }
 
@@ -38,7 +38,7 @@ class BlogController extends Controller
 
     public function edit(Blog $blog): View
     {
-        $tags = Term::toBase()->where('type','tag')->pluck('value','id');
+        $tags = Term::toBase()->where('type','tag')->pluck('title','id');
         return view('admin.blogs.edit', compact('blog','tags'));
     }
 
