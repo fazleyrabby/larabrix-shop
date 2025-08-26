@@ -28,10 +28,10 @@
 
 <body class="light" x-init>
     @include('frontend.partials.header')
+    @include('frontend.partials.nav')
     <main>
         @yield('content')
     </main>
-
     {{-- common toast popup  --}}
     <div class="fixed bottom-4 right-4 z-50 flex flex-col-reverse" style="max-width: 320px; width: 100%;" x-cloak>
         <template x-for="(toast, index) in $store.toast.toasts" :key="toast.id">

@@ -56,6 +56,7 @@
 @section('content')
     <section class="page-container">
         <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+            @include('frontend.partials.breadcrumbs')
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 <!-- Left Column: Product Image -->
                 <div class="w-full">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\PageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Admin\BlogController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Admin\FormSubmissionController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaymentGatewayController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\SliderController;
@@ -172,6 +174,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::get('/products', [FrontendProductController::class, 'index'])->name('frontend.products.index');
 Route::get('/products/{slug}', [FrontendProductController::class, 'show'])->name('frontend.products.show');
 
+Route::get('/categories/{slug}', [FrontendPageController::class, 'category'])->name('frontend.categories.index');
 
 // Cart routes
 Route::prefix('cart')->group(function () {

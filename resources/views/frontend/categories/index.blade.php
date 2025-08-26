@@ -5,7 +5,7 @@
         <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
             @include('frontend.partials.breadcrumbs')
             <header>
-                <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">Product Collection</h2>
+                <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">{{ $category->title }} Product Collection</h2>
 
                 {{-- <p class="mt-4 max-w-md text-gray-500">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque praesentium cumque iure
@@ -26,7 +26,7 @@
             </div>
 
             <div class="mt-4 lg:mt-8 lg:grid lg:grid-cols-4 lg:items-start lg:gap-8">
-                <form method="GET" action="{{ route('frontend.products.index') }}">
+                <form method="GET" action="{{ route('frontend.categories.index', $category->slug) }}">
                     <div class="hidden space-y-4 lg:block">
                         <div>
                             <label for="SortBy" class="block text-xs font-medium text-gray-700"> Sort By </label>
@@ -44,49 +44,6 @@
                             <p class="block text-xs font-medium text-gray-700">Filters</p>
 
                             <div class="mt-1 space-y-2">
-                                <details
-                                    class="overflow-hidden rounded-sm border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
-                                    <summary
-                                        class="flex cursor-pointer items-center justify-between gap-2 p-4 text-gray-900 transition">
-                                        <span class="text-sm font-medium"> Categories </span>
-
-                                        <span class="transition group-open:-rotate-180">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </span>
-                                    </summary>
-
-                                    <div class="border-t border-gray-200 bg-white">
-                                        <header class="flex items-center justify-between p-4">
-                                            <span class="text-sm text-gray-700"> {{ count(request('categories', [])) }}
-                                                Selected </span>
-
-                                            {{-- <button type="button"
-                                                class="text-sm text-gray-900 underline underline-offset-4">
-                                                Reset
-                                            </button> --}}
-                                        </header>
-
-                                        <ul class="space-y-1 border-t border-gray-200 p-4">
-                                            @foreach ($categories as $category)
-                                                <li>
-                                                    <label for="{{ $category->title }}"
-                                                        class="inline-flex items-center gap-2">
-                                                        <input type="checkbox" id="{{ $category->title }}"
-                                                            class="size-5 rounded-sm border-gray-300 shadow-sm"
-                                                            name="categories[]" value="{{ $category->id }}"
-                                                            @checked(in_array($category->id, request('categories', []))) />
-                                                        <span class="text-sm font-medium text-gray-700">
-                                                            {{ $category->title }} </span>
-                                                    </label>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </details>
                                 <details
                                     class="overflow-hidden rounded-sm border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
                                     <summary
@@ -287,37 +244,38 @@
 
                 <div class="lg:col-span-3">
                     <div class="mb-4 flex justify-between items-center">
-    <div class="flex space-x-2">
-        <form action="{{ route('frontend.products.index') }}" method="get" class="flex space-x-2">
-            <button class="btn btn-sm" name="view" value="grid">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
-                </svg>
-            </button>
-            <button class="btn btn-sm" name="view" value="list">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                </svg>
-            </button>
-        </form>
-    </div>
+                        <div class="flex space-x-2">
+                            <form action="{{ route('frontend.categories.index', $category->slug) }}" method="get"
+                                class="flex space-x-2">
+                                <button class="btn btn-sm" name="view" value="grid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
+                                    </svg>
+                                </button>
+                                <button class="btn btn-sm" name="view" value="list">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
 
-    <div>
-        <form action="{{ route('frontend.products.index') }}" method="get">
-            <select class="select" name="limit" onchange="this.form.submit()">
-                <option value="10" @selected(request()->get('limit') == 10)>10</option>
-                <option value="20" @selected(request()->get('limit') == 20)>20</option>
-                <option value="36" @selected(request()->get('limit') == 36)>36</option>
-                <option value="50" @selected(request()->get('limit') == 50)>50</option>
-            </select>
-        </form>
-    </div>
-</div>
-                    
+                        <div>
+                            <form action="{{ route('frontend.categories.index', $category->slug) }}" method="get">
+                                <select class="select" name="limit" onchange="this.form.submit()">
+                                    <option value="10" @selected(request()->get('limit') == 10)>10</option>
+                                    <option value="20" @selected(request()->get('limit') == 20)>20</option>
+                                    <option value="36" @selected(request()->get('limit') == 36)>36</option>
+                                    <option value="50" @selected(request()->get('limit') == 50)>50</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
                     @if (request()->get('view') == 'grid' || !request()->get('view'))
                         <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-3 mb-4">
                             @foreach ($products as $product)

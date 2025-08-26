@@ -40,4 +40,42 @@ class HomeController extends Controller
         }
         return $categories;
     }
+
+
+    // public function parseCategories()
+    // {
+    //     // Load all categories in a single query
+    //     $categories = Category::orderBy('id')->get();
+
+    //     // Build parent => children map
+    //     $childrenMap = [];
+    //     foreach ($categories as $cat) {
+    //         $childrenMap[$cat->parent_id][] = $cat;
+    //     }
+
+    //     // Generate nested HTML
+    //     $nestedHtml = $this->buildNestedHtml(null, $childrenMap);
+
+    //     return view('frontend.categories', compact('nestedHtml'));
+    // }
+
+    // /**
+    //  * Recursive HTML builder (pre-rendered)
+    //  */
+    // private function buildNestedHtml($parentId, $childrenMap)
+    // {
+    //     if (!isset($childrenMap[$parentId])) {
+    //         return '';
+    //     }
+
+    //     $html = '<ul>';
+    //     foreach ($childrenMap[$parentId] as $child) {
+    //         $html .= '<li>' . $child->title;
+    //         $html .= $this->buildNestedHtml($child->id, $childrenMap); // children
+    //         $html .= '</li>';
+    //     }
+    //     $html .= '</ul>';
+
+    //     return $html;
+    // }
 }

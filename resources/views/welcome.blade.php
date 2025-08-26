@@ -12,11 +12,9 @@
     </style>
 @endpush
 @section('content')
-    @include('frontend.partials.nav')
-
     <div
         class="relative w-full h-[400px] md:h-[500px] overflow-hidden
-            bg-gray-300
+            bg-slate-200
             bg-cover bg-center">
 
         <!-- Dark Overlay -->

@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Builders\PageBlocks;
-use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Form;
 use App\Models\Page;
+use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use App\Builders\PageBlocks;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Markdown;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
@@ -56,6 +58,58 @@ class PageController extends Controller
     //     })->filter();
     //     return $data;
     // }
+
+    public function category(Request $request, $slug)
+    {
+        $search = $request->input('q');
+        $limit = $request->input('limit') ?? 10;
+        $view = $request->input('view') ?? 'grid';
+        $selectedCategories = $request->input('categories');
+        $sortBy = $request->input('sort_by');
+        $clear = $request->input('clear') === 'true';
+        $priceMin = $request->input('price_min');
+        $priceMax = $request->input('price_max');
+        $hasFilters = $selectedCategories || $sortBy || $priceMin || $priceMax;
+
+        // Find the category by slug
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        $query = Product::with([
+                'category',
+                'variants.attributeValues.attribute', 
+            ])
+            // Filter products by the current category
+            ->where('category_id', $category->id)
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($selectedCategories, function ($query, $selectedCategories) {
+                return $query->whereIn('category_id', $selectedCategories);
+            })
+            ->when($sortBy != '', function ($query) use ($sortBy) {
+                [$column, $direction] = explode(',', $sortBy);
+                return $query->orderBy($column, $direction);
+            })
+            ->when($priceMin != '' || $priceMax != '', function ($query) use ($priceMin, $priceMax) {
+                if ($priceMin != '' && $priceMax != '') {
+                    return $query->whereBetween('price', [$priceMin, $priceMax]);
+                } elseif ($priceMin != '') {
+                    return $query->where('price', '>=', $priceMin);
+                } elseif ($priceMax != '') {
+                    return $query->where('price', '<=', $priceMax);
+                }
+            });
+
+        $products = $query->paginate($limit);
+
+        if (!$clear && $hasFilters) {
+            $products->appends($request->except('page'));
+        }
+
+        $products->appends(['view' => $view]);
+
+        return view('frontend.categories.index', compact('products', 'category'));
+    }
 
     public function blog($slug){
         $pageSlug = request()->get('pageSlug');
