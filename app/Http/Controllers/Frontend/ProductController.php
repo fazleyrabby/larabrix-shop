@@ -28,7 +28,10 @@ class ProductController extends Controller
         $priceMax = $request->input('price_max');
         $hasFilters = $selectedCategories || $sortBy || $priceMin || $priceMax;
 
-        $categories = Category::toBase()->select('id','title','is_pc_part')->latest()->get();
+        $categories = Category::toBase()
+                    ->whereNot('parent_id', 0)
+                    ->orWhereNot('parent_id', null)
+                    ->select('id','title','is_pc_part')->latest()->get();
         $query = Product::with([
                 'category',
                 'variants.attributeValues.attribute', 

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Services\CategoryService;
 use App\Services\CommonBusinessService;
 use Illuminate\Http\Request;
+use PDO;
 
 class CategoryController extends Controller
 {
@@ -24,8 +25,43 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::toBase()->pluck('title', 'id');
+        // $categories = Category::toBase()->pluck('title', 'id');
+        // $categories = Category::toBase()->orderBy('id')->select('id','parent_id','title')->get();
+        $categories = $this->renderCategoriesSelect();
         return view('admin.categories.create', compact('categories'));
+    }
+
+    private function renderCategoriesSelect($skipId=null, $parentId=null){
+        $query = Category::query();
+        $categories = $query->orderBy('id')->get();
+        $childrenMap = [];
+        foreach ($categories as $cat) {
+            $childrenMap[$cat->parent_id][] = $cat;
+        }
+        return $this->buildSelectOptions(null, $childrenMap, $skipId, $parentId);
+    }
+    
+    private function buildSelectOptions($parentId, $childrenMap, $skipId=null, $selectedId = null, $prefix = '')
+    {
+        $html = '';
+        if (!empty($childrenMap[$parentId])) {
+            foreach ($childrenMap[$parentId] as $child) {
+                // prefix spaces or dashes for indentation
+                $attrs = ($skipId === $child->id) ? ' disabled' : '';
+                $attrs .= ($selectedId === $child->id) ? ' selected' : '';
+                $html .= sprintf(
+                    '<option value="%d"%s>%s%s</option>',
+                    $child->id,
+                    $attrs,
+                    $prefix,
+                    e($child->title)
+                );
+
+                // recursive for children
+                $html .= $this->buildSelectOptions($child->id, $childrenMap, $skipId ,$selectedId,$prefix . ' &nbsp;&nbsp;&nbsp;');
+            }
+        }
+        return $html;
     }
 
     /**
@@ -56,7 +92,8 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         // $this->authorize('create', Product::class);
-        $categories = Category::toBase()->whereNot('id', $category->id)->pluck('title', 'id');
+        // $categories = Category::toBase()->whereNot('id', $category->id)->pluck('title', 'id');
+        $categories = $this->renderCategoriesSelect($category->id, $category->parent_id);
         return view('admin.categories.edit', compact('category','categories'));
     }
 

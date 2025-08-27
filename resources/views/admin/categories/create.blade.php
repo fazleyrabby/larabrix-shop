@@ -66,9 +66,10 @@
                             <div class="col">
                                 <select type="text" class="form-select" name="parent_id" id="categories" value="">
                                     <option selected value="">-</option>
-                                    @foreach ($categories as $index => $title)
+                                    {!! $categories !!}
+                                    {{-- @foreach ($categories as $index => $title)
                                         <option value="{{ $index }}">{{ $title }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                   </select>
                                 <small class="form-hint">
                                     @error('parent_id')

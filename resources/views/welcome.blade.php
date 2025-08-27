@@ -162,7 +162,7 @@
 
                             <!-- Countdown -->
                             <div class="mt-4" {{-- data-deadline="{{ $product->offer_end_date }}" --}}
-                                data-deadline="{{ now()->addDays(30)->toIso8601String() }}"
+                                data-deadline="{{ now()->addDays(7)->toIso8601String() }}"
                                 id="countdown-{{ $product->id }}">
                                 <div class="grid grid-cols-4 w-full text-center gap-3">
                                     <div class="flex flex-col items-center shadow-sm py-2">
