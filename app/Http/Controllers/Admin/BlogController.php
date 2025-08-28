@@ -21,7 +21,7 @@ class BlogController extends Controller
 
     public function create(): View
     {
-        $tags = Term::toBase()->where('type','tag')->pluck('title','id');
+        $tags = Term::toBase()->where('type','blogs_tag')->pluck('title','id');
         return view('admin.blogs.create',compact('tags'));
     }
 
@@ -32,13 +32,19 @@ class BlogController extends Controller
             $data['slug'] = Str::slug($data['title']);
         }
         $blog = Blog::create($data);
-        $blog->terms()->sync($request->tags ?? []);
+        $this->syncTags($request, $blog);
         return redirect()->route('admin.blogs.index')->with('success', 'Blog created.');
+    }
+
+    public function show(Blog $blog): View
+    {
+        $tags = Term::toBase()->where('type','blogs_tag')->pluck('title','id');
+        return view('admin.blogs.show', compact('blog','tags'));
     }
 
     public function edit(Blog $blog): View
     {
-        $tags = Term::toBase()->where('type','tag')->pluck('title','id');
+        $tags = Term::toBase()->where('type','blogs_tag')->pluck('title','id');
         return view('admin.blogs.edit', compact('blog','tags'));
     }
 
@@ -49,7 +55,7 @@ class BlogController extends Controller
             $data['slug'] = Str::slug($data['title']);
         }
         $blog->update($data);
-        $blog->terms()->sync($request->tags ?? []);
+        $this->syncTags($request, $blog);
         return redirect()->route('admin.blogs.index')->with('success', 'Blog updated.');
     }
 
@@ -57,5 +63,19 @@ class BlogController extends Controller
     {
         $blog->delete();
         return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted.');
+    }
+
+    private function syncTags($request, $blog){
+        $tagIds = collect($request->tags ?? [])
+            ->map(function ($tag) {
+                if (is_numeric($tag)) {
+                    return (int) $tag;
+                }
+                return Term::firstOrCreate(
+                    ['title' => $tag, 'type' => 'blogs_tag'],
+                )->id;
+            })
+            ->toArray();
+        $blog->terms()->sync($tagIds);
     }
 }

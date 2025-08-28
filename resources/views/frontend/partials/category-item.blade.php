@@ -1,6 +1,6 @@
 @isset($childrenMap[$parentId])
     @foreach ($childrenMap[$parentId] as $item)
-        <li x-data="{ open: false }" class="relative">
+        <li x-data="{ open: false }" x-cloak class="relative">
             {{-- Parent as toggle --}}
             <button @click="open = !open"
                     class="flex items-center justify-between py-3 px-2 w-full text-left hover:text-gray-300">

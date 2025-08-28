@@ -87,15 +87,15 @@
         <h2 class="text-2xl font-bold mb-6 text-center">Shop by Category</h2>
 
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-4 justify-items-center">
-            @foreach ($categories as $id => $title)
-                <div class="flex flex-col items-center space-y-2 cursor-pointer">
+            @foreach ($categories as $category)
+                <a href="{{ route('frontend.categories.index', $category->slug) }}" class="flex flex-col items-center space-y-2 cursor-pointer">
                     <div
                         class="w-24 h-24 sm:w-28 sm:h-28 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow hover:shadow-lg transition">
-                        <img src="https://placehold.co/150x150/FF7F50/ffffff?text={{ $title }}"
-                            alt="{{ $title }}" class="w-full h-full object-cover" />
+                        <img src="https://placehold.co/150x150/FF7F50/ffffff?text={{ $category->title }}"
+                            alt="{{ $category->title }}" class="w-full h-full object-cover" />
                     </div>
-                    <span class="text-sm font-medium text-center">{{ $title }}</span>
-                </div>
+                    <span class="text-sm font-medium text-center">{{ $category->title }}</span>
+                </a>
             @endforeach
         </div>
     </div>
@@ -107,28 +107,26 @@
             <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <!-- Product Card -->
                 @foreach ($products as $product)
-                    <div class="card bg-base-100 shadow hover:shadow-lg transition">
-                        <figure>
+                    <div x-data="cart({{ $product->id }})" x-init="init()" href="{{ route('frontend.products.show', $product->slug) }}" class="card bg-base-100 shadow hover:shadow-lg transition">
+                        <a href="{{ route('frontend.products.show', $product->slug) }}">
                             <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
                                 id="product-image-{{ $product->id }}" data-src="{{ $product->fullImage }}"
                                 id="product-image-{{ $product->id }}"
                                 class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
                                 loading="lazy" />
-                        </figure>
+                        </a>
                         <div class="card-body p-4">
-                            <h3 class="card-title text-lg">{{ $product->title }}</h3>
+                            <a href="{{ route('frontend.products.show', $product->slug) }}" class="card-title text-lg">{{ $product->title }}</a>
                             <p class="text-sm text-gray-500">
                                 {{ \Illuminate\Support\Str::words($product->short_description, 10, '...') }}
                             </p>
                             <div class="card-actions mt-2 justify-between items-center">
                                 <span class="font-bold text-teal-600">${{ $product->price }}</span>
-                                <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                <button @click="addToCart()" class="btn btn-sm btn-neutral">Add to Cart</button>
                             </div>
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
         </div>
     </section>
@@ -143,21 +141,21 @@
             <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <!-- Product Card -->
                 @foreach ($deals as $product)
-                    <div class="card bg-base-100 shadow hover:shadow-lg transition">
-                        <figure>
+                    <div x-data="cart({{ $product->id }})" x-init="init()" class="card bg-base-100 shadow hover:shadow-lg transition">
+                        <a href="{{ route('frontend.products.show', $product->slug) }}">
                             <img src="{{ $product->fullImage }}" alt="{{ $product->title }}"
                                 id="product-image-{{ $product->id }}"
                                 class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
                                 loading="lazy" />
-                        </figure>
+                        </a>
                         <div class="card-body p-4">
-                            <h3 class="card-title text-lg">{{ $product->title }}</h3>
+                            <a href="{{ route('frontend.products.show', $product->slug) }}" class="card-title text-lg">{{ $product->title }}</a>
                             <p class="text-sm text-gray-500">
                                 {{ \Illuminate\Support\Str::words($product->short_description, 10, '...') }}
                             </p>
                             <div class="card-actions mt-2 justify-between items-center">
                                 <span class="font-bold text-teal-600">${{ $product->price }}</span>
-                                <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                <button class="btn btn-sm btn-neutral" @click="addToCart()">Add to Cart</button>
                             </div>
 
                             <!-- Countdown -->

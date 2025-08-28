@@ -29,7 +29,7 @@
 <body class="light" x-init>
     @include('frontend.partials.header')
     @include('frontend.partials.nav')
-    <main>
+    <main class="mt-28">
         @yield('content')
     </main>
     {{-- common toast popup  --}}

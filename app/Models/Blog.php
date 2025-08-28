@@ -17,6 +17,6 @@ class Blog extends Model
 
     public function tags()
     {
-        return $this->terms()->where('type', 'tag');
+        return $this->terms()->where('type', 'blogs_tag');
     }
 }

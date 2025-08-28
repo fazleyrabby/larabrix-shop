@@ -287,37 +287,37 @@
 
                 <div class="lg:col-span-3">
                     <div class="mb-4 flex justify-between items-center">
-    <div class="flex space-x-2">
-        <form action="{{ route('frontend.products.index') }}" method="get" class="flex space-x-2">
-            <button class="btn btn-sm" name="view" value="grid">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
-                </svg>
-            </button>
-            <button class="btn btn-sm" name="view" value="list">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                </svg>
-            </button>
-        </form>
-    </div>
+                        <div class="flex space-x-2">
+                            <form action="{{ route('frontend.products.index') }}" method="get" class="flex space-x-2">
+                                <button class="btn btn-sm" name="view" value="grid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
+                                    </svg>
+                                </button>
+                                <button class="btn btn-sm" name="view" value="list">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
 
-    <div>
-        <form action="{{ route('frontend.products.index') }}" method="get">
-            <select class="select" name="limit" onchange="this.form.submit()">
-                <option value="10" @selected(request()->get('limit') == 10)>10</option>
-                <option value="20" @selected(request()->get('limit') == 20)>20</option>
-                <option value="36" @selected(request()->get('limit') == 36)>36</option>
-                <option value="50" @selected(request()->get('limit') == 50)>50</option>
-            </select>
-        </form>
-    </div>
-</div>
-                    
+                        <div>
+                            <form action="{{ route('frontend.products.index') }}" method="get">
+                                <select class="select" name="limit" onchange="this.form.submit()">
+                                    <option value="10" @selected(request()->get('limit') == 10)>10</option>
+                                    <option value="20" @selected(request()->get('limit') == 20)>20</option>
+                                    <option value="36" @selected(request()->get('limit') == 36)>36</option>
+                                    <option value="50" @selected(request()->get('limit') == 50)>50</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
                     @if (request()->get('view') == 'grid' || !request()->get('view'))
                         <ul class="grid gap-4 sm:grid-cols-3 lg:grid-cols-3 mb-4">
                             @foreach ($products as $product)

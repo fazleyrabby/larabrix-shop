@@ -22,9 +22,10 @@ class HomeController extends Controller
     }
 
     private function categories(){
-        $categories = Category::whereNull('parent_id')
+        $categories = Category::whereHas('products')->whereNotNull('parent_id')
+            ->select('id','title','slug')
             ->limit(6)
-            ->pluck('title', 'id');
+            ->get();
 
         // Check how many more we need
         $remaining = 6 - $categories->count();

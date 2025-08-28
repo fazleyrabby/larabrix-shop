@@ -1,4 +1,4 @@
-<header class="bg-white dark:bg-gray-900">
+<header class="bg-white dark:bg-gray-900 fixed top-0 z-50 w-full shadow-md">
     <div class="max-w-screen px-3">
         <div class="flex h-16 items-center justify-between">
             <div class="flex-1 md:flex md:items-center md:gap-12">
@@ -22,7 +22,7 @@
                     </label>
                 </form>
             </div>
-            <div x-data="{ isMenuOpen: false, isCartOpen: false }" class="md:flex md:items-center md:gap-12">
+            <div x-cloak x-data="{ isMenuOpen: false, isCartOpen: false }" class="md:flex md:items-center md:gap-12">
                 <nav aria-label="Global" class="md:block hidden w-full md:w-auto mt-4 md:mt-0">
                     {{-- @php
                         $menu = \App\Models\Menu::with('childrenRecursive')->where('type', 'header')->get();

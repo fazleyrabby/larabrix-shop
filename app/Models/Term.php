@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Term extends Model
 {
-    protected $fillable = ['type', 'value', 'slug'];
+    protected $fillable = ['type', 'title', 'slug'];
     public function blogs()
     {
         return $this->belongsToMany(Blog::class);

@@ -1,4 +1,4 @@
-<nav class="bg-gray-800 text-white" x-data="{ mobileOpen: false }">
+<nav class="bg-gray-800 text-white mt-16 fixed top-0 z-40 w-full shadow-md" x-data="{ mobileOpen: false }">
     <div class="max-w-screen-xl px-3">
         <div class="flex items-center justify-between py-3 md:py-0">
             {{-- Mobile Hamburger --}}
