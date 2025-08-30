@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\CommonBusinessService;
 use Illuminate\Http\Request;
@@ -31,7 +32,8 @@ class CategoryController extends Controller
         return view('admin.categories.create', compact('categories'));
     }
 
-    private function renderCategoriesSelect($skipId=null, $parentId=null){
+    private function renderCategoriesSelect($skipId = null, $parentId = null)
+    {
         $query = Category::query();
         $categories = $query->orderBy('id')->get();
         $childrenMap = [];
@@ -40,8 +42,8 @@ class CategoryController extends Controller
         }
         return $this->buildSelectOptions(null, $childrenMap, $skipId, $parentId);
     }
-    
-    private function buildSelectOptions($parentId, $childrenMap, $skipId=null, $selectedId = null, $prefix = '')
+
+    private function buildSelectOptions($parentId, $childrenMap, $skipId = null, $selectedId = null, $prefix = '')
     {
         $html = '';
         if (!empty($childrenMap[$parentId])) {
@@ -58,7 +60,7 @@ class CategoryController extends Controller
                 );
 
                 // recursive for children
-                $html .= $this->buildSelectOptions($child->id, $childrenMap, $skipId ,$selectedId,$prefix . ' &nbsp;&nbsp;&nbsp;');
+                $html .= $this->buildSelectOptions($child->id, $childrenMap, $skipId, $selectedId, $prefix . ' &nbsp;&nbsp;&nbsp;');
             }
         }
         return $html;
@@ -94,7 +96,7 @@ class CategoryController extends Controller
         // $this->authorize('create', Product::class);
         // $categories = Category::toBase()->whereNot('id', $category->id)->pluck('title', 'id');
         $categories = $this->renderCategoriesSelect($category->id, $category->parent_id);
-        return view('admin.categories.edit', compact('category','categories'));
+        return view('admin.categories.edit', compact('category', 'categories'));
     }
 
     /**
@@ -117,8 +119,15 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::withCount('products')->findOrFail($id);
+
+        if ($category->products_count > 0) {
+            return redirect()->back()
+                ->with('error', 'This category already has some products!');
+        }
+
         $category->delete();
-        return redirect()->route('admin.products.categories.index')->with(['success' => 'Successfully deleted!']);
+        return redirect()->back()
+            ->with('success', 'Category deleted successfully!');
     }
 }

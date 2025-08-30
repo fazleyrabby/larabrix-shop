@@ -10,13 +10,43 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TestController extends Controller
 {
     public function index(PaymentGatewayService $paymentGatewayService){
         // dd(session()->get('cart'));
         // $this->pc();
+        // Pdf::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf')
         dd('✌🏻');
+        $data = [
+            'receipt' => [
+                'responsable' => 'JP-01',
+                'date' => now()->toDateString(),
+                'quote' => '20250818-2098',
+                'total' => 30230,
+                'status' => 'Partial',
+            ],
+            'customer' => [
+                'name' => 'Uriel Roque Silvestre',
+            ],
+            'service' => [
+                'name' => 'Servicio de Transportación Terrestre',
+                'unit' => 'Sprinter 2024',
+            ],
+            'payments' => [
+                ['date' => '2025-08-07', 'method' => 'Transferencia', 'amount' => 10000, 'balance' => 20230],
+                ['date' => '2025-08-15', 'method' => 'Transferencia', 'amount' => 10230, 'balance' => 10000],
+            ],
+        ];
+
+        // return view('pdf.invoice', $data);
+        
+        $pdf = Pdf::loadView('pdf.invoice', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('invoice.pdf');
+
+        
         $gateway = $paymentGatewayService->driver('stripe');
         $charge = $gateway->charge(100, 'usd', ['order_id' => 1]);
         dd([
