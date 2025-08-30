@@ -67,10 +67,7 @@
                                 <select type="text" class="form-select" name="parent_id" id="categories" value="">
                                     <option selected value="">-</option>
                                     {!! $categories !!}
-                                    {{-- @foreach ($categories as $index => $title)
-                                        <option value="{{ $index }}">{{ $title }}</option>
-                                    @endforeach --}}
-                                  </select>
+                                </select>
                                 <small class="form-hint">
                                     @error('parent_id')
                                         <div class="text-danger mt-2">{{ $message }}</div>

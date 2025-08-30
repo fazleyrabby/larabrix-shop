@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Term;
+use App\Services\CategoryService;
 use App\Services\CommonBusinessService;
 use App\Services\PhotoService;
 use App\Services\ProductService;
@@ -22,8 +23,10 @@ class ProductController extends Controller
 {
     use AuthorizesRequests, UploadPhotos;
     protected ProductService $service;
+    protected categoryService $categoryService;
     public function __construct(){
         $this->service = new ProductService;
+        $this->categoryService = new CategoryService;
     }
     public function index(Request $request, ProductService $productService)
     {
@@ -33,7 +36,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::toBase()->pluck('title', 'id');
+        // $categories = Category::toBase()->pluck('title', 'id');
+        $categories = $this->categoryService->renderCategoriesSelect();
         $brands = Term::where('type','brand')->toBase()->pluck('title', 'id');
         $attributes = Attribute::with('values')->get();
         return view('admin.products.create', compact('categories','attributes','brands'));
@@ -42,7 +46,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         // $this->authorize('create', Product::class);
-        $categories = Category::toBase()->pluck('title', 'id');
+        // $categories = Category::toBase()->pluck('title', 'id');
+        $categories = $this->categoryService->renderCategoriesSelect(null, $product->category_id);
         $brands = Term::where('type','brand')->toBase()->pluck('title', 'id');
         $attributes = Attribute::with('values')->get();
         $combinations = $this->service->variantCombinations($product);

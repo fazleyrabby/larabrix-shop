@@ -115,11 +115,9 @@
                                 <div class="mb-3 row">
                                     <label class="col-3 col-form-label required">Category</label>
                                     <div class="col">
-                                        <select type="text" class="form-select" id="categories" name="category_id"
-                                            value="">
-                                            @foreach($categories as $index => $value)
-                                                <option value="{{ $index }}">{{ $value }}</option>
-                                            @endforeach
+                                        <select type="text" class="form-select" name="category_id" id="categories" value="">
+                                            <option selected value="">-</option>
+                                            {!! $categories !!}
                                         </select>
                                         <small class="form-hint">
                                             @error('category_id')

@@ -89,7 +89,6 @@
 
                                 <!-- 👉 Your cart content here -->
                                 @include('frontend.carts.sidebar')
-
                             </div>
                         </div>
                     </ul>

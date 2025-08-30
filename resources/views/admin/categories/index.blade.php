@@ -73,6 +73,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>
                         </th>
                         <th>Title</th>
+                        <th>Products</th>
                         <th>Created at</th>
                         <th></th>
                       </tr>
@@ -83,7 +84,9 @@
                         <td><input class="form-check-input m-0 align-middle selected-item" type="checkbox" value="{{ $category->id }}" aria-label="Select invoice"></td>
                         <td><span class="text-secondary">{{ $category->id }}</span></td>
                         <td><a href="{{ route('admin.products.categories.show', $category->id) }}" class="text-reset" tabindex="-1">{{ $category->title }}</a></td>
-
+                        <td>
+                        <a href="{{ route('admin.products.index') }}?category={{ $category->id }}" class="text-reset" tabindex="-1">{{ $category->products_count }}</a>
+                        </td>
                         <td>{{ $category->created_at->diffForHumans() }}</td>
                         <td class="text-end">
                           <span class="dropdown">

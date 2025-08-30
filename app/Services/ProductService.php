@@ -15,9 +15,12 @@ class ProductService
     public function getPaginatedItems($params){
         $query = Product::query()->with('category:id,title');
         $searchQuery = $params['q'] ?? null;
+        $category = $params['category'] ?? null;
         $limit = $params['limit'] ?? config('app.pagination.limit');
         $query->filter($searchQuery);
-        $products = $query->orderBy('id', 'desc')->paginate($limit)->through(function($product) {
+        $products = $query->when($category, function ($q) use ($category) {
+            return $q->where('category_id', $category);
+        })->orderBy('id', 'desc')->paginate($limit)->through(function($product) {
             $product->description = $product->short_description;
             return $product;
         });
