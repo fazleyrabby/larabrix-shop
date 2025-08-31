@@ -83,7 +83,7 @@
                     <tr>
                         <td><input class="form-check-input m-0 align-middle selected-item" type="checkbox" value="{{ $category->id }}" aria-label="Select invoice"></td>
                         <td><span class="text-secondary">{{ $category->id }}</span></td>
-                        <td><a href="{{ route('admin.products.categories.show', $category->id) }}" class="text-reset" tabindex="-1">{{ $category->title }}</a></td>
+                        <td>{{ $category->title }}</td>
                         <td>
                         <a href="{{ route('admin.products.index') }}?category={{ $category->id }}" class="text-reset" tabindex="-1">{{ $category->products_count }}</a>
                         </td>
