@@ -103,26 +103,26 @@
                                     </summary>
 
                                     <div class="border-t border-gray-200 bg-white">
-                                        <header class="flex items-center justify-between p-4">
+                                        {{-- <header class="flex items-center justify-between p-4">
                                             <span class="text-sm text-gray-700"> 0 Selected </span>
 
-                                            {{-- <button type="button"
+                                            <button type="button"
                                                 class="text-sm text-gray-900 underline underline-offset-4">
                                                 Reset
-                                            </button> --}}
-                                        </header>
+                                            </button>
+                                        </header> --}}
 
                                         <ul class="space-y-1 border-t border-gray-200 p-4">
                                             <li>
                                                 <label for="FilterInStock" class="inline-flex items-center gap-2">
-                                                    <input type="checkbox" id="FilterInStock"
-                                                        class="size-5 rounded-sm border-gray-300 shadow-sm" />
+                                                    <input name="in_stock" type="checkbox" id="FilterInStock"
+                                                        class="size-5 rounded-sm border-gray-300 shadow-sm" @checked(request()->get('in_stock'))/>
 
-                                                    <span class="text-sm font-medium text-gray-700"> In Stock (5+) </span>
+                                                    <span class="text-sm font-medium text-gray-700"> In Stock</span>
                                                 </label>
                                             </li>
 
-                                            <li>
+                                            {{-- <li>
                                                 <label for="FilterPreOrder" class="inline-flex items-center gap-2">
                                                     <input type="checkbox" id="FilterPreOrder"
                                                         class="size-5 rounded-sm border-gray-300 shadow-sm" />
@@ -139,7 +139,7 @@
                                                     <span class="text-sm font-medium text-gray-700"> Out of Stock (10+)
                                                     </span>
                                                 </label>
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </details>

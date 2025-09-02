@@ -51,7 +51,8 @@ Route::middleware(['auth', 'role:user'])
         Route::get('logout', [LoginController::class, 'userlogout'])->name('logout');
     });
 
-Route::middleware(['auth', 'role:user'])
+// Route::middleware(['auth', 'role:user'])
+Route::middleware(['auth'])
     ->prefix('checkout')
     ->name('checkout.')
     ->group(function () {

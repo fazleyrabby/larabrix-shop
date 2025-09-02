@@ -26,6 +26,7 @@ class ProductController extends Controller
         $clear = $request->input('clear') === 'true';
         $priceMin = $request->input('price_min');
         $priceMax = $request->input('price_max');
+        $inStock = $request->input('in_stock');
         $hasFilters = $selectedCategories || $sortBy || $priceMin || $priceMax;
 
         $categories = Category::toBase()
@@ -38,6 +39,14 @@ class ProductController extends Controller
             ])
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($inStock == 'on', function ($query) {
+                return $query->where(function ($q) {
+                    $q->where('total_stocks', '>', 0)
+                    ->orWhereHas('variants', function ($q2) {
+                        $q2->where('total_stocks', '>', 0);
+                    });
+                });
             })
             ->when($selectedCategories, function ($query, $selectedCategories) {
                 return $query->whereIn('category_id', $selectedCategories);
