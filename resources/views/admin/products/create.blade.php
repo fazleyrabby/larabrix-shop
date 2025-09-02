@@ -35,6 +35,7 @@
             </div>
         </div>
     </div>
+    @dump($errors)
     <div class="page-body">
         <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
             @csrf
@@ -186,6 +187,18 @@
                                         </small>
                                     </div>
                                 </div>
+                                <div class="mb-3 row stocks">
+                                    <label class="col-3 col-form-label required">Total Stocks</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" aria-describedby=""
+                                            placeholder="Total Stocks" name="total_stocks" value="{{ old('total_stocks') }}">
+                                        <small class="form-hint">
+                                            @error('total_stocks')
+                                                <div class="text-danger mt-2">{{ $message }}</div>
+                                            @enderror
+                                        </small>
+                                    </div>
+                                </div>
                                 <div class="mb-3 row">
                                     <label class="col-3 col-form-label required">Type</label>
                                     <div class="col">
@@ -275,6 +288,7 @@
                                                 <th>Variant</th>
                                                 <th>Price</th>
                                                 <th>SKU</th>
+                                                <th>Total Stocks</th>
                                                 <th>Image</th>
                                             </tr>
                                         </thead>
@@ -438,6 +452,9 @@
                         <input type="text" name="combinations[${index}][sku]" class="form-control" required>
                     </td>
                     <td>
+                        <input type="text" name="combinations[${index}][total_stocks]" class="form-control" required>
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-primary" id="product-variant-${index}-btn"
                                 data-bs-toggle="offcanvas" data-bs-target="#product-variant-${index}"
                                 aria-controls="product-variant-${index}" aria-expanded="false">
@@ -516,6 +533,7 @@
             setupVariantSelects();
             setupVariantChangeListeners();
 
+            const stocks = document.querySelector('.stocks');
             const type = document.getElementById('type');
             const variants = document.querySelector('.variants');
             const variantCombinations = document.querySelector('.variant-combo')
@@ -523,9 +541,11 @@
                 if (this.value == 'variable') {
                     variants.classList.remove('d-none')
                     variantCombinations.classList.remove('d-none')
+                    stocks.classList.add('d-none')
                 } else {
                     variants.classList.add('d-none')
                     variantCombinations.classList.add('d-none')
+                    stocks.classList.remove('d-none')
                 }
             })
         });

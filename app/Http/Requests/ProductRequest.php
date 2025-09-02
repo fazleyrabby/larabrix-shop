@@ -42,7 +42,8 @@ class ProductRequest extends FormRequest
             'price' => 'nullable|numeric',
             'image' => 'nullable|string',
             'compatibility_key' => 'nullable|string|max:100',
-            'is_pc_component' => 'nullable|string|max:100',
+            // 'is_pc_component' => 'nullable|string|max:100',
+            'total_stocks' => 'nullable|numeric',
         ];
     }
 }

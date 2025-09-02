@@ -213,6 +213,18 @@
                                         </small>
                                     </div>
                                 </div>
+                                <div class="mb-3 row stocks {{ $product->type == 'variable' ? 'd-none' : ''}}">
+                                    <label class="col-3 col-form-label required">Total Stocks</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" aria-describedby=""
+                                            placeholder="Total Stocks" name="total_stocks" value="{{ $product->total_stocks }}">
+                                        <small class="form-hint">
+                                            @error('total_stocks')
+                                                <div class="text-danger mt-2">{{ $message }}</div>
+                                            @enderror
+                                        </small>
+                                    </div>
+                                </div>
                                 <div class="mb-3 row">
                                     <label class="col-3 col-form-label required">Type</label>
                                     <div class="col">
@@ -345,6 +357,7 @@
                                                 <th>Variant</th>
                                                 <th>Price</th>
                                                 <th>SKU</th>
+                                                <th>Stocks</th>
                                                 <th>Image</th>
                                             </tr>
                                         </thead>
@@ -394,16 +407,25 @@
                 create: true
             }));
 
+            setupVariantSelects();
+            setupVariantChangeListeners();
+
             const type = document.getElementById('type');
             const variants = document.querySelector('.variants');
+            const stocks = document.querySelector('.stocks');
             const variantCombinations = document.querySelector('.variant-combo')
+
             type.addEventListener('change', function() {
                 if (this.value == 'variable') {
                     variants.classList.remove('d-none')
                     variantCombinations.classList.remove('d-none')
+
+                    stocks.classList.add('d-none')
                 } else {
                     variants.classList.add('d-none')
                     variantCombinations.classList.add('d-none')
+
+                    stocks.classList.remove('d-none')
                 }
             })
         });
@@ -556,6 +578,9 @@
                             <input type="text" name="combinations[${newIndex}][sku]" class="form-control" required value="${existing?.sku ?? ''}">
                         </td>
                         <td>
+                            <input type="text" name="combinations[${newIndex}][total_stocks]" class="form-control" required value="${existing?.total_stocks ?? ''}">
+                        </td>
+                        <td>
                             <button type="button" class="btn btn-primary" id="product-variant-${newIndex}-btn"
                                 data-bs-toggle="offcanvas" data-bs-target="#product-variant-${newIndex}"
                                 aria-controls="product-variant-${newIndex}" aria-expanded="false">
@@ -624,20 +649,20 @@
             return result;
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            setupVariantSelects();
-            setupVariantChangeListeners();
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     setupVariantSelects();
+        //     setupVariantChangeListeners();
 
-            const type = document.getElementById('type');
-            const variants = document.querySelector('.variants');
-            type.addEventListener('change', function() {
-                if (this.value == 'variable') {
-                    variants.classList.remove('d-none');
-                } else {
-                    variants.classList.add('d-none');
-                }
-            });
-        });
+        //     const type = document.getElementById('type');
+        //     const variants = document.querySelector('.variants');
+        //     type.addEventListener('change', function() {
+        //         if (this.value == 'variable') {
+        //             variants.classList.remove('d-none');
+        //         } else {
+        //             variants.classList.add('d-none');
+        //         }
+        //     });
+        // });
 
         let newIndex = 1;
 

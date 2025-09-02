@@ -37,6 +37,7 @@ class ProductService
                 'price' => $variant->price,
                 'sku' => $variant->sku,
                 'image' => $variant->image,
+                'total_stocks' => $variant->total_stocks,
                 'attr_pairs' => $attrs->map(fn ($attr) => [
                     'attr_id' => $attr->attribute_id,
                     'attr_value_id' => $attr->id,
@@ -78,6 +79,7 @@ class ProductService
                         'sku' => $combination['sku'],
                         'price' => $combination['price'],
                         'image' => $image,
+                        'total_stocks' => $combination['total_stocks'],
                     ]);
 
                     $variant->attributeValues()->sync($combination['ids']);
@@ -101,6 +103,7 @@ class ProductService
                 'sku' => $combination['sku'],
                 'price' => $combination['price'],
                 'image' => $image,
+                'total_stocks' => $combination['total_stocks'],
             ]);
 
             $variant->attributeValues()->attach($combination['ids']);

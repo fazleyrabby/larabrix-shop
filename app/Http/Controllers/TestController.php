@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
 
 class TestController extends Controller
 {
@@ -18,6 +19,10 @@ class TestController extends Controller
         // dd(session()->get('cart'));
         // $this->pc();
         // Pdf::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf')
+        $response = Http::get("http://ef.test/test/rabbi");
+        dd($response->json());
+
+        
         dd('✌🏻');
         $data = [
             'receipt' => [

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('price')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
+            $table->integer('total_stocks')->nullable();
             $table->text('short_description')->nullable();
             $table->json('additional_info')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade'); // Foreign key to categories

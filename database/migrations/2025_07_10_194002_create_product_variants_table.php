@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->string('image')->nullable();
             $table->string('compatibility_key')->nullable();
+            $table->integer('total_stocks')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
