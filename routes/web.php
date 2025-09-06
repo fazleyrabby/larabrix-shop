@@ -48,6 +48,9 @@ Route::middleware(['auth', 'role:user'])
     ->group(function () {
         Route::get('/dashboard', [FrontendDashboardController::class, 'index'])->name('dashboard');
         Route::get('/transactions', [FrontendDashboardController::class, 'transactions'])->name('transactions');
+
+        Route::get('/invoice/{id}', [FrontendOrderController::class, 'invoice'])->name('frontend.invoice');
+        Route::get('/invoice/{id}/download', [FrontendOrderController::class, 'invoiceDownload'])->name('frontend.invoice.download');
         Route::get('logout', [LoginController::class, 'userlogout'])->name('logout');
     });
 
@@ -166,8 +169,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
     Route::resource('products', ProductController::class);
     Route::resource('orders', OrderController::class);
-});
 
+    Route::get('/invoice/{id}', [OrderController::class, 'invoice'])->name('invoice');
+    Route::get('/invoice/{id}/download', [OrderController::class, 'invoiceDownload'])->name('invoice.download');
+});
 
 
 
@@ -175,7 +180,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::get('/products', [FrontendProductController::class, 'index'])->name('frontend.products.index');
 Route::get('/products/{slug}', [FrontendProductController::class, 'show'])->name('frontend.products.show');
 
-Route::get('/categories/{slug}', [FrontendPageController::class, 'category'])->name('frontend.categories.index');
+Route::get('/categories/{slug}', [FrontendPageController::class, 'category'])->name('frontend.categories.show');
+Route::get('/categories', [FrontendPageController::class, 'categories'])->name('frontend.categories.index');
+
 
 // Cart routes
 Route::prefix('cart')->group(function () {

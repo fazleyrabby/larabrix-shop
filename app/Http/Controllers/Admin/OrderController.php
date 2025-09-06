@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\OrderService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -40,6 +41,21 @@ class OrderController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Successfully updated!');
+    }
+
+    public function invoice($id)
+    {
+        $order = $this->getOrder($id);
+        return view('admin.orders.invoice',compact('order'));
+    }
+
+    public function invoiceDownload($id){
+        $order = $this->getOrder($id);
+        $data['order'] = collect($order)->toArray();
+
+        $pdf = Pdf::loadView('admin.orders.invoice-pdf', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->download('invoice.pdf');
     }
 
     private function getOrder($id){

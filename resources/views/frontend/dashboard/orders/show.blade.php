@@ -166,8 +166,14 @@
                             </table>
                         </div>
 
+                        <div>
+                            <a href="{{ route('frontend.invoice', $order->id) }}" class="btn btn-neutral">
+                                Invoice
+                            </a>
+                        </div>
                     </div>
 
+                    
                     @include('frontend.dashboard.orders.timeline')
                 </div>
             </x-sidebar>

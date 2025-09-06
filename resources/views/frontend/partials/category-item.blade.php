@@ -5,7 +5,7 @@
             <button @click="open = !open"
                     class="flex items-center justify-between py-3 px-2 w-full text-left hover:text-gray-300">
                 @if($parentId)
-                    <a href="{{ route('frontend.categories.index', $item->slug )}}">{{ $item->title }}</a>
+                    <a href="{{ route('frontend.categories.show', $item->slug )}}">{{ $item->title }}</a>
                 @else 
                     <span>{{ $item->title }}</span>
                 @endif

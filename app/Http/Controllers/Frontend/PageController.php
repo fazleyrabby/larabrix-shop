@@ -58,7 +58,11 @@ class PageController extends Controller
     //     })->filter();
     //     return $data;
     // }
-
+    public function categories(Request $request)
+    {
+        $categories = $this->renderCategoriesList();
+        return view('frontend.categories.index', compact('categories'));
+    }
     public function category(Request $request, $slug)
     {
         $search = $request->input('q');
@@ -75,30 +79,39 @@ class PageController extends Controller
         $category = Category::where('slug', $slug)->firstOrFail();
 
         $query = Product::with([
+            'category',
+            'variants.attributeValues.attribute',
+        ])->where('category_id', $category->id);
+
+        // If no products exist in this category, include all child categories
+        if (!$query->exists()) {
+            $childCategoryIds = Category::where('parent_id', $category->id)->pluck('id')->toArray();
+
+            $query = Product::with([
                 'category',
-                'variants.attributeValues.attribute', 
-            ])
-            // Filter products by the current category
-            ->where('category_id', $category->id)
-            ->when($search, function ($query, $search) {
-                return $query->where('title', 'like', "%{$search}%");
-            })
-            ->when($selectedCategories, function ($query, $selectedCategories) {
-                return $query->whereIn('category_id', $selectedCategories);
-            })
-            ->when($sortBy != '', function ($query) use ($sortBy) {
-                [$column, $direction] = explode(',', $sortBy);
-                return $query->orderBy($column, $direction);
-            })
-            ->when($priceMin != '' || $priceMax != '', function ($query) use ($priceMin, $priceMax) {
-                if ($priceMin != '' && $priceMax != '') {
-                    return $query->whereBetween('price', [$priceMin, $priceMax]);
-                } elseif ($priceMin != '') {
-                    return $query->where('price', '>=', $priceMin);
-                } elseif ($priceMax != '') {
-                    return $query->where('price', '<=', $priceMax);
-                }
-            });
+                'variants.attributeValues.attribute',
+            ])->whereIn('category_id', $childCategoryIds);
+        }
+
+        $query->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%");
+        })
+        ->when($selectedCategories, function ($query, $selectedCategories) {
+            return $query->whereIn('category_id', $selectedCategories);
+        })
+        ->when($sortBy != '', function ($query) use ($sortBy) {
+            [$column, $direction] = explode(',', $sortBy);
+            return $query->orderBy($column, $direction);
+        })
+        ->when($priceMin != '' || $priceMax != '', function ($query) use ($priceMin, $priceMax) {
+            if ($priceMin != '' && $priceMax != '') {
+                return $query->whereBetween('price', [$priceMin, $priceMax]);
+            } elseif ($priceMin != '') {
+                return $query->where('price', '>=', $priceMin);
+            } elseif ($priceMax != '') {
+                return $query->where('price', '<=', $priceMax);
+            }
+        });
 
         $products = $query->paginate($limit);
 
@@ -108,12 +121,49 @@ class PageController extends Controller
 
         $products->appends(['view' => $view]);
 
-        return view('frontend.categories.index', compact('products', 'category'));
+        return view('frontend.categories.show', compact('products', 'category'));
     }
 
-    public function blog($slug){
+    public function blog($slug)
+    {
         $pageSlug = request()->get('pageSlug');
         $blog = Blog::toBase()->where('slug', $slug)->first();
-        return view('frontend.pages.blog', compact('blog','pageSlug'));
+        return view('frontend.pages.blog', compact('blog', 'pageSlug'));
+    }
+
+
+    public function renderCategoriesList()
+    {
+        $categories = Category::orderBy('id')->get();
+
+        $childrenMap = [];
+        foreach ($categories as $cat) {
+            $childrenMap[$cat->parent_id][] = $cat;
+        }
+
+        return $this->buildListItems(null, $childrenMap);
+    }
+
+    private function buildListItems($parentId, $childrenMap)
+    {
+        $html = '';
+
+        if (!empty($childrenMap[$parentId])) {
+            $html .= '<ul class="menu menu-compact bg-base-100 p-2 rounded-box">';
+
+            foreach ($childrenMap[$parentId] as $child) {
+                $html .= '<li class="list-row">
+                        <a class="text-lg font-medium" href="'.route('frontend.categories.show', $child->slug).'">' . e($child->title) . '</a>';
+
+                // recursive children (indented + large text)
+                $html .= $this->buildListItems($child->id, $childrenMap);
+
+                $html .= '</li>';
+            }
+
+            $html .= '</ul>';
+        }
+
+        return $html;
     }
 }
